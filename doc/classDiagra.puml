@@ -22,10 +22,10 @@ class UI {
 	+ String getInput(String msg)
 }
 
-class IO<T implements Iterable>{
+class IO{
     - Scanner scanner
 	+ List<String> getData(String path)
-	+ boolean saveData(Iterable<T> data)
+	+ boolean saveData(Iterable data)
 }
 
 class User{
