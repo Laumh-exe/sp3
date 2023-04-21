@@ -2,19 +2,21 @@
 abstract class AMedia{
 	# Genre genre
 	# int rating
+    # String title
 
     + Genre getGenre()
-    + String getName
-    {abstract} + String toString()
+    + String getTitle()
+    + String toString()
+    {abstract} + String getDate()
 }
 
 class Movie{
-	
+	- int reliceDate
 }
 
 class Series{
-	# int numSeasons
-	# int numEpisodes	
+	- int numSeasons
+	- int numEpisodes	
 }
 
 class UI {
