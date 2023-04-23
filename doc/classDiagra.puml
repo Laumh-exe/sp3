@@ -1,3 +1,5 @@
+@startuml
+
 abstract class AMedia{
 	# Genre genre
 	# int rating
@@ -85,3 +87,5 @@ User *--- AMedia
 
 AMedia <|-- Movie
 AMedia <|-- Series
+
+@enduml
