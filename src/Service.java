@@ -2,8 +2,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import media.AMedia;
+import media.Genre;
+
 public class Service {
     private User currentUser;
+    private UI ui;
     private List<User> users;
     private List<AMedia> media;
 
@@ -30,32 +34,27 @@ public class Service {
 
     // Lauritz
     private void userSetup() {
-
+        String input = ui.getInput("1) Login\n" + "2) Create new user");
         // Asks: Login og Create user
-        UI.displayMessage("1) Login\n" + "2) Create new user");
-        if (UI.getInput().equalsIgnoreCase("1")) {
-            UI.displayMessage("Enter your username: ");
-            String username = UI.getInput();
-            UI.displayMessage("Enter your password: ");
-            String password = UI.getInput();
+        if (input.equalsIgnoreCase("1")) {
+            String username = ui.getInput("Enter your username: ");
+            String password = ui.getInput("Enter your password: ");
             // If login fails - if it doesnt, this method is over and login() has saved the currentUser
             if (!login(password, username)) { //TODO: username, password
-                UI.displayMessage("I Can not find that user, try again");
+                ui.displayMessage("I Can not find that user, try again");
                 userSetup();
             }
         }
         // When creating new User
-        else if (UI.getInput().equalsIgnoreCase("2")) {
-            UI.displayMessage("Enter a username: ");
-            String username = UI.getInput();
-            UI.displayMessage("Enter a password: ");
-            String password = UI.getInput();
+        else if (input.equalsIgnoreCase("2")) {
+            String username = ui.getInput("Enter a username: ");
+            String password = ui.getInput("Enter a password: ");
             User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
             users.add(currentUser);
         }
         // If something went wrong - maybe exception
         else {
-            UI.displayMessage("Please type either 1 or 2 and the press enter");
+            ui.displayMessage("Please type either 1 or 2 and the press enter");
             userSetup();
         }
     }
@@ -63,7 +62,7 @@ public class Service {
 
     // Lauritz
     private void mainMenu() {
-        UI.displayMessage("Welcome " + currentUser.getName + "\n" +
+        String input = ui.getInput("Welcome " + currentUser.getName() + "\n" +
                 "Please choose one of the following options or type Q to quit:\n" +
                 "1) Search for a movie or show by title\n" +
                 "2) Search for a movie or show by genre\n" +
@@ -72,7 +71,7 @@ public class Service {
 
         // Get input and execute accordingly
         do { // Do while(true)
-            switch (UI.getInput().toUpperCase()) {
+            switch (input) {
                 case "1":
                     //Search for movie by title
                     searchMedia();
@@ -87,16 +86,16 @@ public class Service {
                     // Give choice, either add to watchlist or watchMovie
                     break;
                 case "3":
-                    currentUser.getWatchedMediaList(); //TODO: add options  here
+                    currentUser.getWatchedMedia(); //TODO: add options  here
                     makeChoice(currentUser.getWatchedMedia());
                     break;
                 case "4":
-                    currentUser.getWatchlist(); //TODO: add options  here
+                    currentUser.getWatchList(); //TODO: add options  here
                     makeChoice(currentUser.getWatchList());
                 case "q":
                     return; //TODO: exit message here or in onClose()
                 default:
-                    UI.displayMessage("Something went wrong in main menu");
+                    ui.displayMessage("Something went wrong in main menu");
                     return;
             }
         }
@@ -113,28 +112,26 @@ public class Service {
     //Lauritz by choice
     private void makeChoice(Collection media) {
         // Ask if user wants to watch or add to watchlist
-        UI.displayMessage("Please choose one of the following options\n" +
+        String input = ui.getInput("Please choose one of the following options\n" +
                 "1) Add to watch-List" +
                 "2) Watch movie");
-        switch (UI.getInput) {
+        switch (input) {
             case "1":
-                UI.displayMessage("Please type in the name of the movie or show you want to add");
-                AMedia addMedia = getTitleInput(UI.getInput());
-                if (currentMedia != null) {
+                AMedia addMedia = getTitleInput(ui.getInput("Please type in the name of the movie or show you want to add"));
+                if (addMedia != null) {
                     currentUser.addToWatchList(addMedia);
                 }
                 else {
-                    UI.displayMessage("The title did not match any existing titles");
+                    ui.displayMessage("The title did not match any existing titles");
                 }
                 break;
             case "2":
-                UI.displayMessage("Please type in the name of the movie or show you want to watch");
-                AMedia watchMedia = getTitleInput(UI.getInput());
-                if (currentMedia != null) {
+                AMedia watchMedia = getTitleInput(ui.getInput("Please type in the name of the movie or show you want to watch"));
+                if (watchMedia != null) {
                     currentUser.addToWatchedMedia(watchMedia);
                 }
                 else {
-                    UI.displayMessage("The title did not match any existing titles");
+                    ui.displayMessage("The title did not match any existing titles");
                 }
         }
     }
@@ -149,11 +146,10 @@ public class Service {
     // Lauritz
 
     private Collection<AMedia> searchMedia() {
-        UI.displayMessage("What title do you want to find?\n");
-        String title = UI.getInput();
+        String title = ui.getInput("What title do you want to find?\n");
         Collection<AMedia> searchResult = new HashSet<AMedia>();
         for (AMedia m : media) {
-            if (title.equalsIgnoreCase(m.getName)) {
+            if (title.equalsIgnoreCase(m.getTitle())) {
                 searchResult.add(m);
             }
         }
@@ -165,8 +161,8 @@ public class Service {
         Genre genre = genreInput();
         Collection<AMedia> searchResult = new HashSet<AMedia>();
         for (AMedia m : media) {
-            for (Genre g : m.getGenre) {
-                if (genre.equalsIgnoreCase(g)) {
+            for (Genre g : m.getGenres()) {
+                if (genre == g) {
                     searchResult.add(m);
                     break;
                 }
@@ -177,7 +173,7 @@ public class Service {
 
     private Genre genreInput() {
         //List all genres so user can choose one with a number
-        UI.displayMessage("What genre do you want to search for?" +
+        String input = ui.getInput("What genre do you want to search for?" +
                 "1) Crime\n" +
                 "2) Drama\n" +
                 "3) Sport\n" +
@@ -201,7 +197,7 @@ public class Service {
         // TODO: Maybe more genres??
 
         Genre genre;
-        switch (getInput()) {
+        switch (input) {
             case "1":
                 genre = Genre.CRIME;
                 break;
@@ -263,7 +259,7 @@ public class Service {
                 genre = Genre.MUSIC;
                 break;
             default:
-                UI.displayMessage("Please type a number to search for genre");
+                ui.displayMessage("Please type a number to search for genre");
                 genre = null;
                 genreInput();
         }
@@ -273,7 +269,7 @@ public class Service {
     private AMedia getTitleInput(String title) {
         // Compare title to the titles of the search
         for (AMedia m : media) {
-            if (m.getName.equalsIgnoreCase(title)) {
+            if (m.getTitle().equalsIgnoreCase(title)) {
                 return m;
             }
         }
