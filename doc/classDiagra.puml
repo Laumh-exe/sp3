@@ -1,3 +1,6 @@
+@startuml
+
+
 abstract class AMedia{
 	# Genre genre
 	# int rating
@@ -17,7 +20,7 @@ class Series{
 }
 
 class UI {
-    - Scanner scanner
+    '- Scanner scanner
 	+ void displayMsg(String msg)
 	+ String getInput(String msg)
 }
@@ -85,3 +88,5 @@ User *--- AMedia
 
 AMedia <|-- Movie
 AMedia <|-- Series
+
+@enduml
