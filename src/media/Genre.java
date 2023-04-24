@@ -1,7 +1,23 @@
 package media;
 public enum Genre {
-    CRIME, 
-    DRAMA, 
+    FAMILY,
+    FANTASY,
+    MUSICAL,
+    ROMANCE,
+    THRILLER,
+    WAR,
+    DRAMA,
+    BIOGRAPHY,
+    HISTORY,
+    MUSIC,
+    ACTION,
+    ADVENTURE,
+    CRIME,
+    COMEDY,
+    FILMNOIR,
+    SPORT,
     MYSTERY,
-    //todo: add more genre
+    SCIFI,
+    WESTERN,
+    HORROR,
 }
