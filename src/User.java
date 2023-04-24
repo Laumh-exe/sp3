@@ -5,7 +5,7 @@ public class User {
     private String userName;
     private String password;
     private Set<AMedia> watchedMedia;
-    private Set<AMedia> watchlist;
+    private Set<AMedia> watchList;
 
     public String getName(){
         return userName;
@@ -17,6 +17,6 @@ public class User {
         
     }
     public Set<AMedia> getWatchList(){
-        return
+        return watchList;
     }
 }
