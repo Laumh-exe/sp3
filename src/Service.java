@@ -23,108 +23,114 @@ public class Service {
 
 
     // Tobias
+
+    // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
     private void dataSetup() {
 
-        // Navne skal tilpasses her
+        // Data fra IO (lister med String-elementer, der skal splittes)
         String[] dataFilm = io.readFilmData("data/film.csv");
         String[] dataSerier = io.readFilmData("data/serier.csv");
 
 
-       // FILM
+        // FILM
 
         int filmCounter = 0;
 
         for (String sF : dataFilm) {
+
+
             String[] line = sF.split(";");
 
+
+            // TITEL
             String filmTitel = line[0].trim();
 
+            // UDGIVELSESÅR
             int udgivelsesÅr = Integer.parseInt(line[1].trim());
 
 
-            //Den skal splittes på komma. I nogle tilfælde har den to, tre eller fire genre
+            // GENRE
             String genres = line[2].trim();
             String[] genreLine = genres.split(",");
 
-            List<Genre> parsedGenres = new ArrayList<>();
+            List<Genre> parsedGenres = new ArrayList<Genre>();
 
             for (String genreString: genreLine) {
-                switch (genreString){
-                    case "Drama":
+                switch (genreString) {
+                    case " Drama":
                         parsedGenres.add(Genre.DRAMA);
                         break;
-                    case "Mystery":
-                        parsedGenres.add(Genre.DRAMA);
+                    case " Mystery":
+                        parsedGenres.add(Genre.MYSTERY);
                         break;
-                    case "":
-                        parsedGenres.add(Genre.DRAMA);
+                    case " Crime":
+                        parsedGenres.add(Genre.CRIME);
                         break;
-                    case "Drama":
-                        parsedGenres.add(Genre.DRAMA);
+                    case " History":
+                        parsedGenres.add(Genre.HISTORY);
                         break;
-                    case "Drama":
-                        parsedGenres.add(Genre.DRAMA);
+                    case " Biography":
+                        parsedGenres.add(Genre.BIOGRAPHY);
                         break;
-                    case "Drama":
-                        parsedGenres.add(Genre.DRAMA);
+                    case " Romance":
+                        parsedGenres.add(Genre.ROMANCE);
                         break;
-                    case "Drama":
-                        parsedGenres.add(Genre.DRAMA);
+                    case " War":
+                        parsedGenres.add(Genre.WAR);
                         break;
-                    case "Drama":
-                        parsedGenres.add(Genre.DRAMA);
+                    case " Sport":
+                        parsedGenres.add(Genre.SPORT);
+                        break;
+                    case " Adventure":
+                        parsedGenres.add(Genre.ADVENTURE);
+                        break;
+                    case " Fantasy":
+                        parsedGenres.add(Genre.FANTASY);
+                        break;
+                    case " Thriller":
+                        parsedGenres.add(Genre.THRILLER);
+                        break;
+                    case " Musical":
+                        parsedGenres.add(Genre.MUSICAL);
+                        break;
+                    case " Family":
+                        parsedGenres.add(Genre.FAMILY);
+                        break;
+                    case " Music":
+                        parsedGenres.add(Genre.MUSIC);
+                        break;
+                    case " Action":
+                        parsedGenres.add(Genre.ACTION);
+                        break;
+                    case " Comedy":
+                        parsedGenres.add(Genre.COMEDY);
+                        break;
+                    case " Film-Noir":
+                        parsedGenres.add(Genre.FILMNOIR);
+                        break;
+                    case " Sci-fi":
+                        parsedGenres.add(Genre.SCIFI);
+                        break;
+                    case " Western":
+                        parsedGenres.add(Genre.WESTERN);
+                        break;
+                    case " Horror":
+                        parsedGenres.add(Genre.HORROR);
                         break;
                 }
             }
 
-            /*
-            if (genreLine.length == 1) {
-                firstGenre = genreLine[0].trim();
+                // RATING
+                int rating = Integer.parseInt(line[3].trim());
 
 
-            } else if (genreLine.length == 2) {
-                firstGenre = genreLine[0].trim();
-                secondGenre = genreLine[1].trim();
+                AMedia f = new Movie(filmTitel, Genre, rating, "Film", udgivelsesÅr);
 
-            } else if (genreLine.length == 3) {
-                firstGenre = genreLine[0].trim();
-                secondGenre = genreLine[1].trim();
-                thirdGenre = genreLine[2].trim();
 
-            } else if (genreLine.length == 4) {
-                firstGenre = genreLine[0].trim();
-                secondGenre = genreLine[1].trim();
-                thirdGenre = genreLine[2].trim();
-                fourthGenre = genreLine[3].trim();
+                this.media[filmCounter] = f;
+                filmCounter++;
 
             }
-
-             */
-
-
-            int rating = Integer.parseInt(line[3].trim());
-
-
-            AMedia f = new Movie(filmTitel, udgivelsesÅr, Genre, rating);
-
-
-           /* } else if (genreLine.length == 2) {
-                f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, rating);
-
-            } else if (genreLine.length == 3) {
-                f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, rating);
-
-            } else if (genreLine.length == 4) {
-                f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, fourthGenre, rating);
-
-            }
-
-            */
-
-
-            this.media[filmCounter] = f;
-            filmCounter++;
-
 
 
 
@@ -135,6 +141,7 @@ public class Service {
 
 
         for(String sS : dataSerier){
+
             String[] lineSerier = sS.split(";");
 
             // TITEL
@@ -155,52 +162,71 @@ public class Service {
 
             String[] genreLineSerie = genresSerie.split(",");
 
-            // TODO: 24-04-2023 sørg for alle genre er en case
+
+
             List<Genre> parsedGenresSeries = new ArrayList<Genre>();
 
             for (String genreString: genreLineSerie) {
                 switch (genreString){
-                    case "Drama":
+                    case " Drama":
                         parsedGenresSeries.add(Genre.DRAMA);
                         break;
-                    case "Mystery":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Mystery":
+                        parsedGenresSeries.add(Genre.MYSTERY);
                         break;
-                    case "Crime":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Crime":
+                        parsedGenresSeries.add(Genre.CRIME);
                         break;
-                    case "History":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " History":
+                        parsedGenresSeries.add(Genre.HISTORY);
                         break;
-                    case "Biography":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Biography":
+                        parsedGenresSeries.add(Genre.BIOGRAPHY);
                         break;
-                    case "Romance":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Romance":
+                        parsedGenresSeries.add(Genre.ROMANCE);
                         break;
-                    case "War":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " War":
+                        parsedGenresSeries.add(Genre.WAR);
                         break;
-                    case "Sport":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Sport":
+                        parsedGenresSeries.add(Genre.SPORT);
                         break;
-                    case "Adventure":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Adventure":
+                        parsedGenresSeries.add(Genre.ADVENTURE);
                         break;
-                    case "Fantasy":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Fantasy":
+                        parsedGenresSeries.add(Genre.FANTASY);
                         break;
-                    case "War":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Thriller":
+                        parsedGenresSeries.add(Genre.THRILLER);
                         break;
-                    case "War":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Musical":
+                        parsedGenresSeries.add(Genre.MUSICAL);
                         break;
-                    case "War":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Family":
+                        parsedGenresSeries.add(Genre.FAMILY);
                         break;
-                    case "War":
-                        parsedGenresSeries.add(Genre.DRAMA);
+                    case " Music":
+                        parsedGenresSeries.add(Genre.MUSIC);
+                        break;
+                    case " Action":
+                        parsedGenresSeries.add(Genre.ACTION);
+                        break;
+                    case " Comedy":
+                        parsedGenresSeries.add(Genre.COMEDY);
+                        break;
+                    case " Film-Noir":
+                        parsedGenresSeries.add(Genre.FILMNOIR);
+                        break;
+                    case " Sci-fi":
+                        parsedGenresSeries.add(Genre.SCIFI);
+                        break;
+                    case " Western":
+                        parsedGenresSeries.add(Genre.WESTERN);
+                        break;
+                    case " Horror":
+                        parsedGenresSeries.add(Genre.HORROR);
                         break;
                 }
             }
@@ -213,19 +239,19 @@ public class Service {
             // SÆSONER
             String sæsonerOgAntalEpisoder = lineSerier[4].trim();
 
-
             String[] sæsoner = sæsonerOgAntalEpisoder.split(",");
+
 
             // Antal sæsoner
             int antalSæsoner = sæsoner.length;
 
 
-            // Liste hvor hvert element er et tal, der angiver antal episoder i en sæson. Første element i listen
-            // er antal episoder i første sæson osv.
+            /* Liste hvor hvert element er et tal, der angiver antal episoder i en sæson. Første element i listen
+             er antal episoder i første sæson osv.
+             */
             List<Integer> episoderIHverSæson  = new ArrayList<Integer>();
 
-            for (String sÆs : sæsoner )
-            {
+            for (String sÆs : sæsoner ) {
                 String[] sæsonOgTilhørendeAntalEpisoder = sÆs.split("-");
 
                 episoderIHverSæson.add(Integer.parseInt(sæsonOgTilhørendeAntalEpisoder[1].trim()));
