@@ -20,4 +20,5 @@ public enum Genre {
     SCIFI,
     WESTERN,
     HORROR,
+    MUSICAL,
 }
