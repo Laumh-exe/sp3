@@ -1,20 +1,22 @@
 @startuml
 abstract class AMedia{
-	# Genre genre
+	# List<Genre> genres
 	# int rating
+    # String title
 
     + Genre getGenre()
-    + String getName
-    {abstract} + String toString()
+    + String getTitle()
+    + String toString()
+    {abstract} + String getDate()
 }
 
 class Movie{
-	
+	- int reliceDate
 }
 
 class Series{
-	# int numSeasons
-	# int numEpisodes	
+	- int numSeasons
+	- int numEpisodes	
 }
 
 class UI {
@@ -71,7 +73,7 @@ enum Genre{
     DRAMA
     FAMILY
     ROMANCE
-    SIC-FI
+    SICFI
 }
 
 Service *-- AMedia
