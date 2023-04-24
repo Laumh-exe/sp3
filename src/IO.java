@@ -41,7 +41,7 @@ public class IO {
             writer.write("User, Movie \n");
 
 
-            writer.write(user.getUser() + "," + user.getMovie() + "," + user.getSerie "\n");
+            writer.write(user.getUser() + "," + user.getMovie() + "," + user.getSerie() + "\n");
 
 
             writer.close();
@@ -61,7 +61,7 @@ public class IO {
             writer.write("User, Movie \n");
 
 
-            writer.write(user.getUser() + "," + user.getMovie() + "," + user.getSerie "\n");
+            writer.write(user.getUser() + "," + user.getMovie() + "," + user.getSeries() + "\n");
 
 
             writer.close();
