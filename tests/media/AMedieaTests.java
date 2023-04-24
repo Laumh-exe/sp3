@@ -56,6 +56,20 @@ public class AMedieaTests {
         assertEquals(expected, actual);
         
     }
-
+    @Test
+    public void aMediaGetGenres(){
+        //Arrange
+        List expected = new ArrayList<Genre>();
+        expected.add(Genre.CRIME);
+        expected.add(Genre.DRAMA);
+        AMedia media = new Movie("Movie", expected, 0, 2000);
+    
+        //Act
+        List<Genre> actual = media.getGenres();
+    
+        //Assert
+        assertEquals(expected, actual);
+    }
+    
 }
 
