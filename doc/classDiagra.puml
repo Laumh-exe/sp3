@@ -1,6 +1,6 @@
 @startuml
 abstract class AMedia{
-	# Genre genre
+	# List<Genre> genres
 	# int rating
     # String title
 
