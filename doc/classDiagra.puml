@@ -36,7 +36,8 @@ class User{
     - Set<AMedia> watchList
     + String getName()
     + boolean comparePassword(String password)
-    + void addToWtachList(AMedia media)
+    + void addToWatchList(AMedia media)
+    + void addToWatchedMediaList(AMedia media)
     + Set<AMedia> getWatchList()
 }
 
