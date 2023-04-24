@@ -21,8 +21,16 @@ public class User {
         return userName;
     }
 
+    public String getPassword(){
+        return password;
+    }
+    //Todo: Possible password validator?
     public boolean comparePassword(String password){
-        return true;
+        if(password.equals(this.password)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void addToWatchedMedia(AMedia media){
