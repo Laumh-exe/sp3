@@ -1,0 +1,88 @@
+@startuml
+abstract class AMedia{
+	# Genre genre
+	# int rating
+
+    + Genre getGenre()
+    + String getName
+    {abstract} + String toString()
+}
+
+class Movie{
+	
+}
+
+class Series{
+	# int numSeasons
+	# int numEpisodes	
+}
+
+class UI {
+    - Scanner scanner
+	+ void displayMsg(String msg)
+	+ String getInput(String msg)
+}
+
+class IO{
+    - Scanner scanner
+	+ List<String> getData(String path)
+	+ boolean saveData(Iterable data)
+}
+
+class User{
+    - String userName
+    - String password
+    - Set<AMedia> watchedMedia
+    - Set<AMedia> watchList
+    + String getName()
+    + boolean comparePassword(String password)
+    + void addToWtachList(AMedia media)
+    + Set<AMedia> getWatchList()
+}
+
+class Service{
+    - User currentUser
+	- List<User> users
+	- List<AMedia> media
+	
+    + Service()
+    - void dataSetup()
+    - void userSetup()
+    - void mainMenu() 
+    - void showMovies()
+    - void showSeries()
+	- boolean login(String username, String password)
+    - List<AMedia> searchMedia(String moveName)
+    - List<AMedia> searchByGenre(Genre genre)
+    - void onColse()
+}
+note left of Service::setup
+    userlogin / create user
+end note
+
+note left of Service::mainMainu
+    This is the main loop of the programSS
+end note
+
+enum Genre{
+    CRIME
+    WAR
+    DRAMA
+    FAMILY
+    ROMANCE
+    SIC-FI
+}
+
+Service *-- AMedia
+Service *-- User
+Service *-- UI
+Service *-- IO
+
+AMedia *--- Genre
+
+User *--- AMedia
+
+
+AMedia <|-- Movie
+AMedia <|-- Series
+@enduml
