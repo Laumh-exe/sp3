@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 public class User {
@@ -14,7 +15,8 @@ public class User {
         return true;
     }
     public void addToWatchList(AMedia media){
-        
+        Set addWatchList = new HashSet();
+
     }
     public Set<AMedia> getWatchList(){
         return
