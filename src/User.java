@@ -1,6 +1,6 @@
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.regex.*;
 import media.AMedia;
 
 public class User {
@@ -24,7 +24,22 @@ public class User {
     public String getPassword(){
         return password;
     }
-    //Todo: Possible password validator?
+
+    public static boolean isValidPassword(String password) {
+
+        String regex = "^(?=.*[0-9])"
+                + "(?=.*[a-z])(?=.*[A-Z])"
+                + "(?=.*[@#$%^&+=])"
+                + "(?=\\S+$).{8,20}$";
+
+        Pattern p = Pattern.compile(regex);
+        if (password == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public boolean comparePassword(String password){
         if(password.equals(this.password)) {
             return true;
