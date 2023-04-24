@@ -20,12 +20,90 @@ public class Service {
 
 
 
+    private List<Genre> addGenreToGenreList(String[] genreStringList){
+
+        List<Genre> parsedGenres = new ArrayList<Genre>();
+
+        for (String genreString: genreStringList) {
+
+            switch (genreString.replaceFirst("\\W*", "")) {
+                case "Drama":
+                    parsedGenres.add(Genre.DRAMA);
+                    break;
+                case "Mystery":
+                    parsedGenres.add(Genre.MYSTERY);
+                    break;
+                case "Crime":
+                    parsedGenres.add(Genre.CRIME);
+                    break;
+                case "History":
+                    parsedGenres.add(Genre.HISTORY);
+                    break;
+                case "Biography":
+                    parsedGenres.add(Genre.BIOGRAPHY);
+                    break;
+                case "Romance":
+                    parsedGenres.add(Genre.ROMANCE);
+                    break;
+                case "War":
+                    parsedGenres.add(Genre.WAR);
+                    break;
+                case "Sport":
+                    parsedGenres.add(Genre.SPORT);
+                    break;
+                case "Adventure":
+                    parsedGenres.add(Genre.ADVENTURE);
+                    break;
+                case "Fantasy":
+                    parsedGenres.add(Genre.FANTASY);
+                    break;
+                case "Thriller":
+                    parsedGenres.add(Genre.THRILLER);
+                    break;
+                case "Musical":
+                    parsedGenres.add(Genre.MUSICAL);
+                    break;
+                case "Family":
+                    parsedGenres.add(Genre.FAMILY);
+                    break;
+                case "Music":
+                    parsedGenres.add(Genre.MUSIC);
+                    break;
+                case "Action":
+                    parsedGenres.add(Genre.ACTION);
+                    break;
+                case "Comedy":
+                    parsedGenres.add(Genre.COMEDY);
+                    break;
+                case "Film-Noir":
+                    parsedGenres.add(Genre.FILMNOIR);
+                    break;
+                case "Sci-fi":
+                    parsedGenres.add(Genre.SCIFI);
+                    break;
+                case "Western":
+                    parsedGenres.add(Genre.WESTERN);
+                    break;
+                case "Horror":
+                    parsedGenres.add(Genre.HORROR);
+                    break;
+            }
+        return parsedGenres;
+        }
+
 
 
     // Tobias
 
     // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
-    private void dataSetup() {
+    private void dataSetup () {
+
+        // ############ USERS ##########################
+
+        //String [] dataUser = io.readFilemData("")
+
+
+        // ############ FILM OG SERIER DATA ############
 
         // Data fra IO (lister med String-elementer, der skal splittes)
         String[] dataFilm = io.readFilmData("data/film.csv");
@@ -51,84 +129,21 @@ public class Service {
 
             // GENRE
             String genres = line[2].trim();
+
             String[] genreLine = genres.split(",");
 
-            List<Genre> parsedGenres = new ArrayList<Genre>();
-
-            for (String genreString: genreLine) {
-                switch (genreString) {
-                    case " Drama":
-                        parsedGenres.add(Genre.DRAMA);
-                        break;
-                    case " Mystery":
-                        parsedGenres.add(Genre.MYSTERY);
-                        break;
-                    case " Crime":
-                        parsedGenres.add(Genre.CRIME);
-                        break;
-                    case " History":
-                        parsedGenres.add(Genre.HISTORY);
-                        break;
-                    case " Biography":
-                        parsedGenres.add(Genre.BIOGRAPHY);
-                        break;
-                    case " Romance":
-                        parsedGenres.add(Genre.ROMANCE);
-                        break;
-                    case " War":
-                        parsedGenres.add(Genre.WAR);
-                        break;
-                    case " Sport":
-                        parsedGenres.add(Genre.SPORT);
-                        break;
-                    case " Adventure":
-                        parsedGenres.add(Genre.ADVENTURE);
-                        break;
-                    case " Fantasy":
-                        parsedGenres.add(Genre.FANTASY);
-                        break;
-                    case " Thriller":
-                        parsedGenres.add(Genre.THRILLER);
-                        break;
-                    case " Musical":
-                        parsedGenres.add(Genre.MUSICAL);
-                        break;
-                    case " Family":
-                        parsedGenres.add(Genre.FAMILY);
-                        break;
-                    case " Music":
-                        parsedGenres.add(Genre.MUSIC);
-                        break;
-                    case " Action":
-                        parsedGenres.add(Genre.ACTION);
-                        break;
-                    case " Comedy":
-                        parsedGenres.add(Genre.COMEDY);
-                        break;
-                    case " Film-Noir":
-                        parsedGenres.add(Genre.FILMNOIR);
-                        break;
-                    case " Sci-fi":
-                        parsedGenres.add(Genre.SCIFI);
-                        break;
-                    case " Western":
-                        parsedGenres.add(Genre.WESTERN);
-                        break;
-                    case " Horror":
-                        parsedGenres.add(Genre.HORROR);
-                        break;
-                }
-            }
-
-                // RATING
-                int rating = Integer.parseInt(line[3].trim());
+            List<Genre> listOfGenres = addGenreToGenreList(genreLine);
 
 
-                AMedia f = new Movie(filmTitel, Genre, rating, "Film", udgivelsesÅr);
+            // RATING
+            int rating = Integer.parseInt(line[3].trim());
 
 
-                this.media[filmCounter] = f;
-                filmCounter++;
+            AMedia f = new Movie(filmTitel, listOfGenres, rating, "Film", udgivelsesÅr);
+
+
+            this.media[filmCounter] = f;
+            filmCounter++;
 
             }
 
@@ -137,7 +152,7 @@ public class Service {
 
 
     // SERIER
-        int serieCounter =0;
+        int serieCounter = 0;
 
 
         for(String sS : dataSerier){
@@ -162,74 +177,7 @@ public class Service {
 
             String[] genreLineSerie = genresSerie.split(",");
 
-
-
-            List<Genre> parsedGenresSeries = new ArrayList<Genre>();
-
-            for (String genreString: genreLineSerie) {
-                switch (genreString){
-                    case " Drama":
-                        parsedGenresSeries.add(Genre.DRAMA);
-                        break;
-                    case " Mystery":
-                        parsedGenresSeries.add(Genre.MYSTERY);
-                        break;
-                    case " Crime":
-                        parsedGenresSeries.add(Genre.CRIME);
-                        break;
-                    case " History":
-                        parsedGenresSeries.add(Genre.HISTORY);
-                        break;
-                    case " Biography":
-                        parsedGenresSeries.add(Genre.BIOGRAPHY);
-                        break;
-                    case " Romance":
-                        parsedGenresSeries.add(Genre.ROMANCE);
-                        break;
-                    case " War":
-                        parsedGenresSeries.add(Genre.WAR);
-                        break;
-                    case " Sport":
-                        parsedGenresSeries.add(Genre.SPORT);
-                        break;
-                    case " Adventure":
-                        parsedGenresSeries.add(Genre.ADVENTURE);
-                        break;
-                    case " Fantasy":
-                        parsedGenresSeries.add(Genre.FANTASY);
-                        break;
-                    case " Thriller":
-                        parsedGenresSeries.add(Genre.THRILLER);
-                        break;
-                    case " Musical":
-                        parsedGenresSeries.add(Genre.MUSICAL);
-                        break;
-                    case " Family":
-                        parsedGenresSeries.add(Genre.FAMILY);
-                        break;
-                    case " Music":
-                        parsedGenresSeries.add(Genre.MUSIC);
-                        break;
-                    case " Action":
-                        parsedGenresSeries.add(Genre.ACTION);
-                        break;
-                    case " Comedy":
-                        parsedGenresSeries.add(Genre.COMEDY);
-                        break;
-                    case " Film-Noir":
-                        parsedGenresSeries.add(Genre.FILMNOIR);
-                        break;
-                    case " Sci-fi":
-                        parsedGenresSeries.add(Genre.SCIFI);
-                        break;
-                    case " Western":
-                        parsedGenresSeries.add(Genre.WESTERN);
-                        break;
-                    case " Horror":
-                        parsedGenresSeries.add(Genre.HORROR);
-                        break;
-                }
-            }
+            List<Genre> listOfGenresSerier = addGenreToGenreList(genreLineSerie);
 
 
             //RATING
@@ -260,7 +208,7 @@ public class Service {
             }
 
 
-            AMedia se = new Series(serieTitel, Genre, ratingSerie, "Serie", antalSæsoner, episoderIHverSæson, startÅr, slutÅr);
+            AMedia se = new Series(serieTitel, listOfGenresSerier, ratingSerie, "Serie", antalSæsoner, episoderIHverSæson, startÅr, slutÅr);
 
 
             this.media[serieCounter] = se;
