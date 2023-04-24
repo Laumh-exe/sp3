@@ -12,4 +12,5 @@ Tilhørende billeder ligger i filen serieforsider.zip. De enkelte billeder er na
 Billederne kan være (og er sikkert) beskyttet af copyright, så lad dem blive indenfor vores lukkede kreds :-)
 
 Genres:
-Family,  Fantasy,  Musical,  Romance,  Thriller,  War,  Drama,  Biography,  History,  Music,  Action,  Adventure,  Crime,  Comedy,  Film-Noir,  Sport,  Mystery, Crime,  Sci-fi,  Western,  Horror
+Family,  Fantasy,  Musical,  Romance,  Thriller,  War,  Drama,  Biography,  History,  Music,  Action,  Adventure,  Comedy,  Film-Noir,  Sport,  Mystery, Crime,  Sci-fi,  Western,  Horror
+War, Film-Noir, Sci-Fi, Western, Horror

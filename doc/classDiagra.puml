@@ -1,20 +1,22 @@
 @startuml
 abstract class AMedia{
-	# Genre genre
+	# List<Genre> genres
 	# int rating
+    # String title
 
     + Genre getGenre()
-    + String getName
-    {abstract} + String toString()
+    + String getTitle()
+    + String toString()
+    {abstract} + String getDate()
 }
 
 class Movie{
-	
+	- int reliceDate
 }
 
 class Series{
-	# int numSeasons
-	# int numEpisodes	
+	- int numSeasons
+	- int numEpisodes	
 }
 
 class UI {
@@ -36,7 +38,8 @@ class User{
     - Set<AMedia> watchList
     + String getName()
     + boolean comparePassword(String password)
-    + void addToWtachList(AMedia media)
+    + void addToWatchList(AMedia media)
+    + void addToWatchedMediaList(AMedia media)
     + Set<AMedia> getWatchList()
 }
 
@@ -54,7 +57,7 @@ class Service{
 	- boolean login(String username, String password)
     - List<AMedia> searchMedia(String moveName)
     - List<AMedia> searchByGenre(Genre genre)
-    - void onColse()
+    - void onClose()
 }
 note left of Service::setup
     userlogin / create user
@@ -70,7 +73,7 @@ enum Genre{
     DRAMA
     FAMILY
     ROMANCE
-    SIC-FI
+    SICFI
 }
 
 Service *-- AMedia
