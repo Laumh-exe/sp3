@@ -1,8 +1,9 @@
 abstract class AMedia{
 	# Genre genre
-	# int rating
+	# float rating
 
     + Genre getGenre()
+    + float getRating()
     + String getName
     {abstract} + String toString()
 }
