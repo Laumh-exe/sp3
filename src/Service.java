@@ -7,14 +7,11 @@ public class Service {
     private List<AMedia> media;
 
 
-
-
     // Lauritz
     public Service() {
 
 
     }
-
 
 
     // Tobias
@@ -24,8 +21,6 @@ public class Service {
     }
 
 
-
-
     // Lauritz
     private void userSetup() {
 
@@ -33,7 +28,6 @@ public class Service {
         // Execute methods accordingly: Login or Create user
 
     }
-
 
 
     // Lauritz
@@ -58,8 +52,6 @@ public class Service {
     }
 
 
-
-
     //Lauritz by choice
 
     private void showMovies() {
@@ -72,15 +64,11 @@ public class Service {
     }
 
 
-
-
-
     // Tobias
 
     private boolean login(String username, String password) {
         return false;
     }
-
 
 
     // Lauritz
@@ -97,10 +85,20 @@ public class Service {
     }
 
 
-
-
     // Tobias
     private void onClose() {
 
+    }
+
+    private Collection<AMedia> searchMediaDate() {
+        UI.displayMessage("From what year is your movie from?\n");
+        String releaseDate = UI.getInput();
+        Collection<AMedia> searchResult = new HashSet<AMedia>();
+        for (AMedia m : media) {
+            if (releaseDate.equalsIgnoreCase(m.getReleaseDate)) {
+                searchResult.add(m);
+            }
+        }
+        return searchResult;
     }
 }
