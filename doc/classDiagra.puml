@@ -72,7 +72,7 @@ enum Genre{
     DRAMA
     FAMILY
     ROMANCE
-    SIC-FI
+    SICFI
 }
 
 Service *-- AMedia
