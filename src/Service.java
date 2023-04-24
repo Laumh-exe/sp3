@@ -12,8 +12,20 @@ public class Service {
 
     private List<User> users;
     private List<AMedia> media;
-
+    
     private IO io = new IO();
+
+        // Lauritz
+    public Service() {
+        // Setup data
+        dataSetup();
+        // Setup user and run main menu
+        userSetup();
+        // Main menu - handles other methods
+        mainMenu();
+        // Closes when mainMenu is exited
+        onClose();
+    }
 
 
     private List<Genre> addGenreToGenreList(String[] genreStringList){
@@ -212,20 +224,7 @@ public class Service {
         }
 
 
-    // Lauritz
-    public Service() {
-        // Setup data
-        dataSetup();
-        // Setup user and run main menu
-        userSetup();
-        // Main menu - handles other methods
-        mainMenu();
-        // Closes when mainMenu is exited
-        onClose();
-    }
 
-
-    }
 
 
     // Lauritz
