@@ -7,7 +7,7 @@ public abstract class AMedia{
     private String title;
     private String typeOfMedia;
     private List<Genre> genres;
-    private int rating;
+    private float rating;
 
     public AMedia(String title, List<Genre> genres, int rating, String typeOfMedia){
         this.typeOfMedia = typeOfMedia;
