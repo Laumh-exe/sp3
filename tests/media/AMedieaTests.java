@@ -27,13 +27,13 @@ public class AMedieaTests {
         List tmp2 = new ArrayList<Integer>();
         tmp2.add(10);
         tmp2.add(12);
-        AMedia media = new Movie("Movie", tmp1, 0, 2000);
+        AMedia media = new Movie("Movie", tmp1, 0, "Movie",  2000);
 
         //Act
         String actual = media.toString();
 
         //Assert
-        String expected = "Title: Movie\nRating: 0\nGenres: CRIME, DRAMA \nDate: 2000\n";
+        String expected = "This is a Movie\nTitle: Movie\nRating: 0\nGenres: CRIME, DRAMA \nDate: 2000\n";
         assertEquals(expected, actual);
     }
     
@@ -46,13 +46,13 @@ public class AMedieaTests {
         List tmp2 = new ArrayList<Integer>();
         tmp2.add(10);
         tmp2.add(12);
-        AMedia media = new Series("Series", tmp1, 0, 10, tmp2, 2000, 2001);
+        AMedia media = new Series("Series", tmp1, 0, "Series", 10, tmp2, 2000, 2001);
 
         //Act
         String actual = media.toString();
 
         //Assert
-        String expected = "Title: Series\nRating: 0\nGenres: CRIME, DRAMA \nStart date: 2000 end date: 2001\nNumber of seasons: 10\nSeason 1: Number of episodes: 10\nSeason 2: Number of episodes: 12\n";
+        String expected = "This is a Series\nTitle: Series\nRating: 0\nGenres: CRIME, DRAMA \nStart date: 2000 end date: 2001\nNumber of seasons: 10\nSeason 1: Number of episodes: 10\nSeason 2: Number of episodes: 12\n";
         assertEquals(expected, actual);
         
     }
@@ -62,7 +62,7 @@ public class AMedieaTests {
         List expected = new ArrayList<Genre>();
         expected.add(Genre.CRIME);
         expected.add(Genre.DRAMA);
-        AMedia media = new Movie("Movie", expected, 0, 2000);
+        AMedia media = new Movie("Movie", expected, 0, "Movie", 2000);
     
         //Act
         List<Genre> actual = media.getGenres();

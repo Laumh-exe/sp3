@@ -4,14 +4,16 @@ import java.util.List;
 
 public abstract class AMedia{
     
-    protected String title;
-    protected List<Genre> genres;
-    protected int rating;
+    private String title;
+    private String typeOfMedia;
+    private List<Genre> genres;
+    private int rating;
 
-    public AMedia(String title, List<Genre> genres, int rating){
-        this.title  = title;
-        this.genres = genres;
-        this.rating = rating;
+    public AMedia(String title, List<Genre> genres, int rating, String typeOfMedia){
+        this.typeOfMedia = typeOfMedia;
+        this.title       = title;
+        this.genres      = genres;
+        this.rating      = rating;
     }
 
     public List<Genre> getGenres() {
@@ -25,6 +27,7 @@ public abstract class AMedia{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
+        sb.append("This is a " + typeOfMedia + "\n");
         sb.append("Title: " + title + "\n");
         sb.append("Rating: " + rating + "\n");
         sb.append("Genres: ");

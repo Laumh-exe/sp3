@@ -3,15 +3,14 @@ package media;
 import java.util.List;
 
 public class Series extends AMedia{
-
     
     protected int numSeasons;
 	protected List<Integer> numEpisodes;
     private int startDate;
     private int endDate;
 
-    public Series(String title, List<Genre> genres, int rating, int numSeasons, List<Integer> numEpisodes, int startDate, int endDate) {
-        super(title, genres, rating);
+    public Series(String title, List<Genre> genres, int rating, String typeOfMedia, int numSeasons, List<Integer> numEpisodes, int startDate, int endDate) {
+        super(title, genres, rating, typeOfMedia);
         this.numSeasons  = numSeasons;
         this.numEpisodes = numEpisodes;
         this.startDate   = startDate;
