@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,159 +22,224 @@ public class Service {
 
 
 
-
-
-
     // Tobias
-    private void dataSetup(String[] data, String typeOfData) {
+    private void dataSetup() {
 
         // Navne skal tilpasses her
-        String[] dataFilm = io.readGameData("data/film.csv", 100);
-        String[] dataSerier = io.readBoardData("src/carddata.csv",100);
+        String[] dataFilm = io.readFilmData("data/film.csv");
+        String[] dataSerier = io.readFilmData("data/serier.csv");
 
 
-        if (typeOfData.equals("film")) {
-            int counter = 0;
+       // FILM
 
-            for (String s : data) {
-                String[] line = s.split(";");
+        int filmCounter = 0;
 
-                String filmTitel = line[0].trim();
+        for (String sF : dataFilm) {
+            String[] line = sF.split(";");
 
-                int udgivelsesÅr = Integer.parseInt(line[1].trim());
+            String filmTitel = line[0].trim();
+
+            int udgivelsesÅr = Integer.parseInt(line[1].trim());
 
 
-                //Den skal splittes på komma. I nogle tilfælde har den to, tre eller fire genre
-                String genres = line[2].trim();
-                String[] genreLine = genres.split(",");
+            //Den skal splittes på komma. I nogle tilfælde har den to, tre eller fire genre
+            String genres = line[2].trim();
+            String[] genreLine = genres.split(",");
 
-                String firstGenre = "";
-                String secondGenre = "";
-                String thirdGenre = "";
-                String fourthGenre = "";
+            List<Genre> parsedGenres = new ArrayList<>();
 
-                if (genreLine.length == 1) {
-                    firstGenre = genreLine[0].trim();
-
-                } else if (genreLine.length == 2) {
-                    firstGenre = genreLine[0].trim();
-                    secondGenre = genreLine[1].trim();
-
-                } else if (genreLine.length == 3) {
-                    firstGenre = genreLine[0].trim();
-                    secondGenre = genreLine[1].trim();
-                    thirdGenre = genreLine[2].trim();
-
-                } else if (genreLine.length == 4) {
-                    firstGenre = genreLine[0].trim();
-                    secondGenre = genreLine[1].trim();
-                    thirdGenre = genreLine[2].trim();
-                    fourthGenre = genreLine[3].trim();
-
+            for (String genreString: genreLine) {
+                switch (genreString){
+                    case "Drama":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
+                    case "Mystery":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
+                    case "":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
+                    case "Drama":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
+                    case "Drama":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
+                    case "Drama":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
+                    case "Drama":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
+                    case "Drama":
+                        parsedGenres.add(Genre.DRAMA);
+                        break;
                 }
-
-
-                int rating = Integer.parseInt(line[3].trim());
-
-
-                AMedia f;
-
-                if (genreLine.length == 1) {
-                    f = new Movie(filmTitel, udgivelsesÅr, firstGenre, rating);
-                } else if (genreLine.length == 2) {
-                    f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, rating);
-
-                } else if (genreLine.length == 3) {
-                    f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, rating);
-
-                } else if (genreLine.length == 4) {
-                    f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, fourthGenre, rating);
-
-                }
-
-
-                this.media[counter] = f;
-                counter++;
             }
-        }
+
+            /*
+            if (genreLine.length == 1) {
+                firstGenre = genreLine[0].trim();
 
 
-        else {
-                int counter =0;
+            } else if (genreLine.length == 2) {
+                firstGenre = genreLine[0].trim();
+                secondGenre = genreLine[1].trim();
 
-                for(String s : data){
-                    String[] line = s.split(";");
+            } else if (genreLine.length == 3) {
+                firstGenre = genreLine[0].trim();
+                secondGenre = genreLine[1].trim();
+                thirdGenre = genreLine[2].trim();
 
-                    String serieTitel = line[0].trim();
+            } else if (genreLine.length == 4) {
+                firstGenre = genreLine[0].trim();
+                secondGenre = genreLine[1].trim();
+                thirdGenre = genreLine[2].trim();
+                fourthGenre = genreLine[3].trim();
 
-                    int udgivelsesÅr = Integer.parseInt(line[1].trim());
+            }
 
-
-                    //Den skal splittes på komma. I nogle tilfælde har den to, tre eller fire genre
-                    String genres = line[2].trim();
-                    String[] genreLine = genres.split(",");
-
-                    String firstGenre = "";
-                    String secondGenre = "";
-                    String thirdGenre = "";
-                    String fourthGenre = "";
-
-                    if(genreLine.length == 1) {
-                        firstGenre = genreLine[0].trim();
-                    } else if (genreLine.length ==2) {
-                        firstGenre = genreLine[0].trim();
-                        secondGenre = genreLine[1].trim();
-
-                    } else if (genreLine.length == 3) {
-                        firstGenre = genreLine[0].trim();
-                        secondGenre = genreLine[1].trim();
-                        thirdGenre = genreLine[2].trim();
-
-                    } else if (genreLine.length == 4) {
-                        firstGenre = genreLine[0].trim();
-                        secondGenre = genreLine[1].trim();
-                        thirdGenre = genreLine[2].trim();
-                        fourthGenre = genreLine[3].trim();
-
-                    }
-
-                    String sæsonerOgAntalEpisoder = line[4].trim();
+             */
 
 
-
-                    String[] sæsoner = sæsonerOgAntalEpisoder.split(",");
-
-                    int antalSæsoner = sæsoner.length;
+            int rating = Integer.parseInt(line[3].trim());
 
 
+            AMedia f = new Movie(filmTitel, udgivelsesÅr, Genre, rating);
 
-                    String[] sæsonOgTilhørendeAntalEpisoder = s
+
+           /* } else if (genreLine.length == 2) {
+                f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, rating);
+
+            } else if (genreLine.length == 3) {
+                f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, rating);
+
+            } else if (genreLine.length == 4) {
+                f = new Movie(filmTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, fourthGenre, rating);
+
+            }
+
+            */
+
+
+            this.media[filmCounter] = f;
+            filmCounter++;
 
 
 
-                    int rating = Integer.parseInt(genreLine[3].trim());
 
 
 
-                    AMedia se;
-
-                    if(genreLine.length == 1) {
-                        f = new Series(serieTitel, udgivelsesÅr, firstGenre, rating);
-                    } else if (genreLine.length ==2) {
-                        f = new Series(serieTitel, udgivelsesÅr, firstGenre, secondGenre, rating);
-
-                    } else if (genreLine.length == 3) {
-                        f = new Series(serieTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, rating);
-
-                    } else if (genreLine.length == 4) {
-                        f = new Series(serieTitel, udgivelsesÅr, firstGenre, secondGenre, thirdGenre, fourthGenre, rating);
-
-                    }
+    // SERIER
+        int serieCounter =0;
 
 
-                    this.media[counter] = se;
-                    counter++;
+        for(String sS : dataSerier){
+            String[] lineSerier = sS.split(";");
+
+            // TITEL
+            String serieTitel = lineSerier[0].trim();
+
+
+            // START- OG SLUTÅRSTAL
+            String startOgSlutÅrstal = lineSerier[1].trim();
+
+            String[] splitAfStartOgSlut = startOgSlutÅrstal.split("-");
+
+            int startÅr = Integer.parseInt(splitAfStartOgSlut[0]);
+            int slutÅr = Integer.parseInt(splitAfStartOgSlut[1]);
+
+
+            // GENRE
+            String genresSerie = lineSerier[2].trim();
+
+            String[] genreLineSerie = genresSerie.split(",");
+
+            // TODO: 24-04-2023 sørg for alle genre er en case
+            List<Genre> parsedGenresSeries = new ArrayList<Genre>();
+
+            for (String genreString: genreLineSerie) {
+                switch (genreString){
+                    case "Drama":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "Mystery":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "Crime":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "History":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "Biography":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "Romance":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "War":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "Sport":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "Adventure":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "Fantasy":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "War":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "War":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "War":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
+                    case "War":
+                        parsedGenresSeries.add(Genre.DRAMA);
+                        break;
                 }
+            }
+
+
+            //RATING
+            int ratingSerie = Integer.parseInt(lineSerier[3].trim());
+
+
+            // SÆSONER
+            String sæsonerOgAntalEpisoder = lineSerier[4].trim();
+
+
+            String[] sæsoner = sæsonerOgAntalEpisoder.split(",");
+
+            // Antal sæsoner
+            int antalSæsoner = sæsoner.length;
+
+
+            // Liste hvor hvert element er et tal, der angiver antal episoder i en sæson. Første element i listen
+            // er antal episoder i første sæson osv.
+            List<Integer> episoderIHverSæson  = new ArrayList<Integer>();
+
+            for (String sÆs : sæsoner )
+            {
+                String[] sæsonOgTilhørendeAntalEpisoder = sÆs.split("-");
+
+                episoderIHverSæson.add(Integer.parseInt(sæsonOgTilhørendeAntalEpisoder[1].trim()));
+
+
+            }
+
+
+            AMedia se = new Series(serieTitel, Genre, ratingSerie, "Serie", antalSæsoner, episoderIHverSæson, startÅr, slutÅr);
+
+
+            this.media[serieCounter] = se;
+            serieCounter++;
+        }
 
     }
 
