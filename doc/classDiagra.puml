@@ -57,7 +57,7 @@ class Service{
 	- boolean login(String username, String password)
     - List<AMedia> searchMedia(String moveName)
     - List<AMedia> searchByGenre(Genre genre)
-    - void onColse()
+    - void onClose()
 }
 note left of Service::setup
     userlogin / create user
