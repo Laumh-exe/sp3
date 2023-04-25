@@ -37,7 +37,7 @@ public class Service {
 
         for (String genreString : genreStringList) {
             Genre genre = gerneParser(genreString);
-            if(genre == null){
+            if (genre == null) {
                 //todo: handle this case
             }
             parsedGenres.add(genre);
@@ -269,60 +269,37 @@ public class Service {
         }
     }
 
-        // Lauritz
-        private void userSetup () {
-            String input = ui.getInput("1) Login\n" + "2) Create new user");
-
-            // Asks: Login og Create user
-            if (input.equalsIgnoreCase("1")) {
-
-                login();
-
-                }
-
-            // When creating new User
-            else if (input.equalsIgnoreCase("2")) {
-                createUser();
-            }
-            // If something went wrong - maybe exception
-            else {
-                ui.displayMessage("Please type either 1 or 2 and the press enter");
-
-                userSetup();
-            }
-
-
+    // Lauritz
+    private void userSetup() {
+        String input = ui.getInput("1) Login\n" + "2) Create new user");
+        // Asks: Login og Create user
+        if (input.equalsIgnoreCase("1")) {
+            login();
         }
         // When creating new User
         else if (input.equalsIgnoreCase("2")) {
-            String username = ui.getInput("Enter a username: ");
-            String password = ui.getInput("Enter a password: ");
-            User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
-            users.add(currentUser);
+            createUser();
         }
         // If something went wrong - maybe exception
         else {
             ui.displayMessage("Please type either 1 or 2 and the press enter");
-
             userSetup();
         }
     }
 
-    private void createUser(){
+    private void createUser() {
 
         String username = ui.getInput("Enter a username: ");
 
-        for (User u: users){
+        for (User u : users) {
 
-            if (u.getName().equals(username)){
+            if (u.getName().equals(username)) {
 
                 ui.displayMessage("This username is already in use. Please select another username");
                 createUser();
                 return;
 
-            }
-
-            else {
+            } else {
 
                 String password = ui.getInput("Enter a password: ");
                 User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
@@ -330,11 +307,6 @@ public class Service {
 
             }
         }
-    }
-
-
-
-
     }
 
     // Lauritz
@@ -348,7 +320,7 @@ public class Service {
                     "4) Search for a movie or show by release date\n" +
                     "5) Show your already-seen list\n" +
                     "6) Show watchlist");
-                
+
             // Get input and execute accordingly
             switch (input) {
                 case "1":
@@ -370,9 +342,9 @@ public class Service {
                     makeChoice(searchByRating());
                 case "4":
                     // Search and display the returned collection
-                    ui.displayMessage(searchByReleaseDate().toString());
+                    //ui.displayMessage(searchByReleaseDate().toString());
                     // Show options and make choice
-                    makeChoice(searchByReleaseDate());
+                    // makeChoice(searchByReleaseDate());
                 case "5":
                     ui.displayMessage(currentUser.getWatchedMedia().toString());
                     makeChoice(currentUser.getWatchedMedia());
@@ -435,9 +407,7 @@ public class Service {
             mainMenu();
 
 
-        }
-
-        else {
+        } else {
 
             ui.displayMessage("You entered the wrong code. Try again");
             enterPassword(u);
@@ -446,18 +416,18 @@ public class Service {
         }
 
     }
+
     private void login() {
 
 
         String username = ui.getInput("Enter your username: ");
 
-        for (User u: users) {
+        for (User u : users) {
 
             if (u.getName().equals(username)) {
                 enterPassword(u);
 
-            }
-            else {
+            } else {
                 ui.displayMessage("I can't find that user. Try again");
                 login();
 
@@ -496,7 +466,7 @@ public class Service {
 
     private Genre genreInput() {
         Genre genre = null;
-        while (genre == null){
+        while (genre == null) {
             //List all genres so user can choose one with a number
             String input = ui.getInput("What genre do you want to search for?\n" +
                     "Crime\n" +
@@ -522,7 +492,7 @@ public class Service {
             // TODO: Maybe more genres??
 
             genre = gerneParser(input);
-            if(genre == null){
+            if (genre == null) {
                 ui.displayMessage("Please type a number to search for genre");
             }
         }
