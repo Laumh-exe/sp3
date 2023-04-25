@@ -386,13 +386,15 @@ public class Service {
         AMedia foundMedia = getTitleInput(ui.getInput("Please type in the name of a movie or show"));
         if (foundMedia != null) {
             String input = ui.getInput("Please choose one of the following options\n" +
-                    "1) Add to watch-List" +
+                    "1) Add to watchlist" +
                     "2) Watch movie");
             switch (input) {
                 case "1":
+                    ui.displayMessage("Adding " + foundMedia.getTitle() + " to watchlist");
                     currentUser.addToWatchList(foundMedia);
                     break;
                 case "2":
+                    ui.displayMessage("Watching " + foundMedia.getTitle());
                     currentUser.addToWatchedMedia(foundMedia);
             }
         } else {
