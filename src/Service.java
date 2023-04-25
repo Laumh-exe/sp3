@@ -1,6 +1,6 @@
-
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import media.AMedia;
@@ -16,10 +16,10 @@ public class Service {
 
     private List<User> users;
     private List<AMedia> media;
-    
+
     private IO io = new IO();
 
-        // Lauritz
+    // Lauritz
     public Service() {
         // Setup data
         dataSetup();
@@ -32,11 +32,11 @@ public class Service {
     }
 
 
-    private List<Genre> addGenreToGenreList(String[] genreStringList){
+    private List<Genre> addGenreToGenreList(String[] genreStringList) {
 
         List<Genre> parsedGenres = new ArrayList<Genre>();
 
-        for (String genreString: genreStringList) {
+        for (String genreString : genreStringList) {
 
             switch (genreString.replaceFirst("\\W*", "")) {
                 case "Drama":
@@ -100,7 +100,7 @@ public class Service {
                     parsedGenres.add(Genre.HORROR);
                     break;
             }
-            
+
         }
         return parsedGenres;
     }
@@ -109,7 +109,7 @@ public class Service {
     // Tobias
 
     // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
-    private void dataSetup () {
+    private void dataSetup() {
 
 
         // ############ FILM OG SERIER DATA ############
@@ -152,14 +152,11 @@ public class Service {
 
             this.media.add(f);
 
-            //this.media[filmCounter] = f;
-            //filmCounter++;
 
         }
 
 
         // SERIER
-        //int serieCounter = 0;
 
         for (String sS : dataSerier) {
 
@@ -292,6 +289,7 @@ public class Service {
     }
 
 
+
         // Lauritz
         private void userSetup () {
             String input = ui.getInput("1) Login\n" + "2) Create new user");
@@ -317,6 +315,7 @@ public class Service {
             // If something went wrong - maybe exception
             else {
                 ui.displayMessage("Please type either 1 or 2 and the press enter");
+
                 userSetup();
             }
         }
@@ -329,31 +328,42 @@ public class Service {
                 "Please choose one of the following options or type Q to quit:\n" +
                 "1) Search for a movie or show by title\n" +
                 "2) Search for a movie or show by genre\n" +
-                "3) Show your already-seen list\n" +
-                "4) Show watchlist");
+                "3) Search for a movie or show by rating\n" +
+                "4) Search for a movie or show by release date\n" +
+                "5) Show your already-seen list\n" +
+                "6) Show watchlist");
 
         // Get input and execute accordingly
         do { // Do while(true)
             switch (input) {
                 case "1":
-                    //Search for movie by title
-                    searchMedia();
-                    //Options
-                    searchMedia();
+                    // Search and display the returned collection
+                    ui.displayMessage(searchMedia().toString());
+                    // Show options and make choice
                     makeChoice(searchMedia());
                     break;
                 case "2":
-                    // Calls toString on the returned Collection
-                    searchByGenre();
+                    // Search and display the returned collection
+                    ui.displayMessage(searchByGenre().toString());
+                    // Show options and make choice
                     makeChoice(searchByGenre());
-                    // Give choice, either add to watchlist or watchMovie
                     break;
                 case "3":
-                    currentUser.getWatchedMedia(); //TODO: add options  here
+                    // Search and display the returned collection
+                    ui.displayMessage(searchByRating().toString());
+                    // Show options and make choice
+                    makeChoice(searchByRating());
+                case "4":
+                    // Search and display the returned collection
+                    ui.displayMessage(searchByReleaseDate().toString());
+                    // Show options and make choice
+                    makeChoice(searchByReleaseDate());
+                case "5":
+                    ui.displayMessage(currentUser.getWatchedMedia().toString());
                     makeChoice(currentUser.getWatchedMedia());
                     break;
-                case "4":
-                    currentUser.getWatchList(); //TODO: add options  here
+                case "6":
+                    ui.displayMessage(currentUser.getWatchList().toString());
                     makeChoice(currentUser.getWatchList());
                 case "q":
                     return; //TODO: exit message here or in onClose()
@@ -384,8 +394,7 @@ public class Service {
                 AMedia addMedia = getTitleInput(ui.getInput("Please type in the name of the movie or show you want to add"));
                 if (addMedia != null) {
                     currentUser.addToWatchList(addMedia);
-                }
-                else {
+                } else {
                     ui.displayMessage("The title did not match any existing titles");
                 }
                 break;
@@ -393,8 +402,7 @@ public class Service {
                 AMedia watchMedia = getTitleInput(ui.getInput("Please type in the name of the movie or show you want to watch"));
                 if (watchMedia != null) {
                     currentUser.addToWatchedMedia(watchMedia);
-                }
-                else {
+                } else {
                     ui.displayMessage("The title did not match any existing titles");
                 }
         }
@@ -452,12 +460,12 @@ public class Service {
                 "11) Family\n" +
                 "12) Action\n" +
                 "13) Adventure\n" +
-                "14) History\n"+
-                "15) War\n"+
-                "16) Sci-Fi\n"+
-                "17) Film-Noir\n"+
-                "18) Western\n"+
-                "19) Horror\n"+
+                "14) History\n" +
+                "15) War\n" +
+                "16) Sci-Fi\n" +
+                "17) Film-Noir\n" +
+                "18) Western\n" +
+                "19) Horror\n" +
                 "20) Music\n");
         // TODO: Maybe more genres??
 
@@ -545,5 +553,22 @@ public class Service {
     // Tobias
     private void onClose() {
 
+    }
+
+    private List<AMedia> searchByRating(){
+        float rating = -1;
+        while(rating == -1){
+            try {
+                rating = Float.parseFloat(ui.getInput("Type the minimum rating you are looking for with a . as your decimal point"));
+            } catch (Exception e) {
+                ui.displayMessage("your input was not a decimal number");
+            }
+        }
+        List<AMedia> ratings = new ArrayList<>();
+        for (AMedia md : media) {
+            if(md.getRating() >= rating){
+                ratings.add(md);
+            }
+        }
     }
 }
