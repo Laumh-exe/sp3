@@ -489,9 +489,9 @@ public class Service {
         float rating = -1;
         while(rating == -1){
             try {
-                rating = Float.parseFloat(UI.getInput("Type the minimum rating you are looking for with a . as your desimal point"));
+                rating = Float.parseFloat(UI.getInput("Type the minimum rating you are looking for with a . as your decimal point"));
             } catch (Exception e) {
-                UI.displayMassage("your input was not a desimal number");
+                ui.displayMassage("your input was not a decimal number");
             }
         }
         List<AMedia> rating = new ArrayList<>();
