@@ -9,7 +9,6 @@ import media.Movie;
 import media.Series;
 
 
-
 public class Service {
     private User currentUser;
     private UI ui;
@@ -289,37 +288,35 @@ public class Service {
     }
 
 
-
-        // Lauritz
-        private void userSetup () {
-            String input = ui.getInput("1) Login\n" + "2) Create new user");
-            // Asks: Login og Create user
-            if (input.equalsIgnoreCase("1")) {
-                String username = ui.getInput("Enter your username: ");
-                String password = ui.getInput("Enter your password: ");
-                // If login fails - if it doesnt, this method is over and login() has saved the currentUser
-                if (!login(password, username)) { //TODO: username, password
-                    ui.displayMessage("I Can not find that user, try again");
-                    userSetup();
-                }
-
-
-            }
-            // When creating new User
-            else if (input.equalsIgnoreCase("2")) {
-                String username = ui.getInput("Enter a username: ");
-                String password = ui.getInput("Enter a password: ");
-                User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
-                users.add(currentUser);
-            }
-            // If something went wrong - maybe exception
-            else {
-                ui.displayMessage("Please type either 1 or 2 and the press enter");
-
+    // Lauritz
+    private void userSetup() {
+        String input = ui.getInput("1) Login\n" + "2) Create new user");
+        // Asks: Login og Create user
+        if (input.equalsIgnoreCase("1")) {
+            String username = ui.getInput("Enter your username: ");
+            String password = ui.getInput("Enter your password: ");
+            // If login fails - if it doesnt, this method is over and login() has saved the currentUser
+            if (!login(password, username)) { //TODO: username, password
+                ui.displayMessage("I Can not find that user, try again");
                 userSetup();
             }
-        }
 
+
+        }
+        // When creating new User
+        else if (input.equalsIgnoreCase("2")) {
+            String username = ui.getInput("Enter a username: ");
+            String password = ui.getInput("Enter a password: ");
+            User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
+            users.add(currentUser);
+        }
+        // If something went wrong - maybe exception
+        else {
+            ui.displayMessage("Please type either 1 or 2 and the press enter");
+
+            userSetup();
+        }
+    }
 
 
     // Lauritz
@@ -386,25 +383,20 @@ public class Service {
 
     private void makeChoice(Collection media) {
         // Ask if user wants to watch or add to watchlist
-        String input = ui.getInput("Please choose one of the following options\n" +
-                "1) Add to watch-List" +
-                "2) Watch movie");
-        switch (input) {
-            case "1":
-                AMedia addMedia = getTitleInput(ui.getInput("Please type in the name of the movie or show you want to add"));
-                if (addMedia != null) {
-                    currentUser.addToWatchList(addMedia);
-                } else {
-                    ui.displayMessage("The title did not match any existing titles");
-                }
-                break;
-            case "2":
-                AMedia watchMedia = getTitleInput(ui.getInput("Please type in the name of the movie or show you want to watch"));
-                if (watchMedia != null) {
-                    currentUser.addToWatchedMedia(watchMedia);
-                } else {
-                    ui.displayMessage("The title did not match any existing titles");
-                }
+        AMedia foundMedia = getTitleInput(ui.getInput("Please type in the name of a movie or show"));
+        if (foundMedia != null) {
+            String input = ui.getInput("Please choose one of the following options\n" +
+                    "1) Add to watch-List" +
+                    "2) Watch movie");
+            switch (input) {
+                case "1":
+                    currentUser.addToWatchList(foundMedia);
+                    break;
+                case "2":
+                    currentUser.addToWatchedMedia(foundMedia);
+            }
+        } else {
+            ui.displayMessage("The title did not match any existing titles");
         }
     }
 
@@ -556,9 +548,9 @@ public class Service {
         ui.displayMessage("Program is closing, goodbye");
     }
 
-    private List<AMedia> searchByRating(){
+    private List<AMedia> searchByRating() {
         float rating = -1;
-        while(rating == -1){
+        while (rating == -1) {
             try {
                 rating = Float.parseFloat(ui.getInput("Type the minimum rating you are looking for with a . as your decimal point"));
             } catch (Exception e) {
@@ -567,7 +559,7 @@ public class Service {
         }
         List<AMedia> ratings = new ArrayList<>();
         for (AMedia md : media) {
-            if(md.getRating() >= rating){
+            if (md.getRating() >= rating) {
                 ratings.add(md);
             }
         }
