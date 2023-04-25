@@ -489,15 +489,15 @@ public class Service {
         float rating = -1;
         while(rating == -1){
             try {
-                rating = Float.parseFloat(UI.getInput("Type the minimum rating you are looking for with a . as your decimal point"));
+                rating = Float.parseFloat(ui.getInput("Type the minimum rating you are looking for with a . as your decimal point"));
             } catch (Exception e) {
-                ui.displayMassage("your input was not a decimal number");
+                ui.displayMessage("your input was not a decimal number");
             }
         }
-        List<AMedia> rating = new ArrayList<>();
+        List<AMedia> ratings = new ArrayList<>();
         for (AMedia md : media) {
-            if(md.getRating() >= rating){
-                rating.add(md);
+            if(md.getRating() >= ratings){
+                ratings.add(md);
             }
         }
     }
