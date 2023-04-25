@@ -24,6 +24,10 @@ public abstract class AMedia{
         return title;
     }
 
+    public float getRating(){
+        return rating;
+    }
+
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
