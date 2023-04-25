@@ -37,70 +37,11 @@ public class Service {
         List<Genre> parsedGenres = new ArrayList<Genre>();
 
         for (String genreString : genreStringList) {
-
-            switch (genreString.replaceFirst("\\W*", "")) {
-                case "Drama":
-                    parsedGenres.add(Genre.DRAMA);
-                    break;
-                case "Mystery":
-                    parsedGenres.add(Genre.MYSTERY);
-                    break;
-                case "Crime":
-                    parsedGenres.add(Genre.CRIME);
-                    break;
-                case "History":
-                    parsedGenres.add(Genre.HISTORY);
-                    break;
-                case "Biography":
-                    parsedGenres.add(Genre.BIOGRAPHY);
-                    break;
-                case "Romance":
-                    parsedGenres.add(Genre.ROMANCE);
-                    break;
-                case "War":
-                    parsedGenres.add(Genre.WAR);
-                    break;
-                case "Sport":
-                    parsedGenres.add(Genre.SPORT);
-                    break;
-                case "Adventure":
-                    parsedGenres.add(Genre.ADVENTURE);
-                    break;
-                case "Fantasy":
-                    parsedGenres.add(Genre.FANTASY);
-                    break;
-                case "Thriller":
-                    parsedGenres.add(Genre.THRILLER);
-                    break;
-                case "Musical":
-                    parsedGenres.add(Genre.MUSICAL);
-                    break;
-                case "Family":
-                    parsedGenres.add(Genre.FAMILY);
-                    break;
-                case "Music":
-                    parsedGenres.add(Genre.MUSIC);
-                    break;
-                case "Action":
-                    parsedGenres.add(Genre.ACTION);
-                    break;
-                case "Comedy":
-                    parsedGenres.add(Genre.COMEDY);
-                    break;
-                case "Film-Noir":
-                    parsedGenres.add(Genre.FILMNOIR);
-                    break;
-                case "Sci-fi":
-                    parsedGenres.add(Genre.SCIFI);
-                    break;
-                case "Western":
-                    parsedGenres.add(Genre.WESTERN);
-                    break;
-                case "Horror":
-                    parsedGenres.add(Genre.HORROR);
-                    break;
+            Genre genre = gerneParser(genreString);
+            if(genre == null){
+                //todo: handle this case
             }
-
+            parsedGenres.add(genre);
         }
         return parsedGenres;
     }
@@ -108,56 +49,131 @@ public class Service {
 
     // Tobias
 
+    private Genre gerneParser(String genreString) {
+        switch (genreString.replaceFirst("\\W*", "")) {
+            case "Drama":
+                return Genre.DRAMA;
+            case "Mystery":
+                return Genre.MYSTERY;
+            case "Crime":
+                return Genre.CRIME;
+            case "History":
+                return Genre.HISTORY;
+            case "Biography":
+                return Genre.BIOGRAPHY;
+            case "Romance":
+                return Genre.ROMANCE;
+            case "War":
+                return Genre.WAR;
+            case "Sport":
+                return Genre.SPORT;
+            case "Adventure":
+                return Genre.ADVENTURE;
+            case "Fantasy":
+                return Genre.FANTASY;
+            case "Thriller":
+                return Genre.THRILLER;
+            case "Musical":
+                return Genre.MUSICAL;
+            case "Family":
+                return Genre.FAMILY;
+            case "Music":
+                return Genre.MUSIC;
+            case "Action":
+                return Genre.ACTION;
+            case "Comedy":
+                return Genre.COMEDY;
+            case "Film-Noir":
+                return Genre.FILMNOIR;
+            case "Sci-fi":
+                return Genre.SCIFI;
+            case "Western":
+                return Genre.WESTERN;
+            case "Horror":
+                return Genre.HORROR;
+        }
+        return null;
+    }
+
+
     // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
     private void dataSetup() {
-
 
         // ############ FILM OG SERIER DATA ############
 
         // Data fra IO (lister med String-elementer, der skal splittes)
         List<String> dataFilm = io.getData("data/film.csv");
         List<String> dataSerier = io.getData("data/serier.csv");
-
-
+        List<String> dataUser = io.getData("data/user_data.csv");
         // FILM
-
-        //int filmCounter = 0;
-
-        for (String sF : dataFilm) {
-
-
-            String[] line = sF.split(";");
-
-
-            // TITEL
-            String filmTitel = line[0].trim();
-
-            // UDGIVELSESÅR
-            int udgivelsesÅr = Integer.parseInt(line[1].trim());
-
-
-            // GENRE
-            String genres = line[2].trim();
-
-            String[] genreLine = genres.split(",");
-
-            List<Genre> listOfGenres = addGenreToGenreList(genreLine);
-
-
-            // RATING
-            int rating = Integer.parseInt(line[3].trim());
-
-
-            AMedia f = new Movie(filmTitel, listOfGenres, rating, "Film", udgivelsesÅr);
-
-            this.media.add(f);
-
-
-        }
-
-
+        formatMoviesDataFromString(dataFilm);
         // SERIER
+        formatSeriesDataFromString(dataSerier);
+        // ############ USERS ##########################
+        formatUsersFromData(dataUser);
+    }
 
+    private void formatUsersFromData(List<String> dataUser) {
+        for (String dU : dataUser) {
+
+
+            String[] dataUserline = dU.split(";");
+
+            //navn semi paswoord semi, watchlist, semi watcHED
+
+            // BRUGERNAVN
+            String userName = dataUserline[0].trim();
+
+
+            // KODE
+            String password = dataUserline[1].trim();
+
+
+            User loadedUser = new User(userName, password);
+
+            // GEMTE FILM (WatchList) MEDIETITEL
+            String watchList = dataUserline[2].trim();
+
+            String[] titlesInWatchList = watchList.split(",");
+
+
+            for (String ttW : titlesInWatchList) {
+
+                for (AMedia aM : this.media) {
+
+                    if (ttW.equals(aM.getTitle())) {
+
+                        loadedUser.addToWatchList(aM);
+
+                    }
+
+                }
+
+
+            }
+
+            // SETE FILM (WatchedList) MEDIETITEL
+            String watchedMedia = dataUserline[3].trim();
+
+            String[] titlesInWatchedMedia = watchedMedia.split(",");
+
+
+            for (String ttWM : titlesInWatchedMedia) {
+
+                for (AMedia aMW : this.media) {
+
+                    if (ttWM.equals(aMW.getTitle())) {
+
+                        loadedUser.addToWatchedMedia(aMW);
+
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void formatSeriesDataFromString(List<String> dataSerier) {
         for (String sS : dataSerier) {
 
             String[] lineSerier = sS.split(";");
@@ -218,123 +234,87 @@ public class Service {
             //this.media[serieCounter] = se;
             //serieCounter++;
         }
+    }
+
+    private void formatMoviesDataFromString(List<String> dataFilm) {
+        for (String sF : dataFilm) {
 
 
-        // ############ USERS ##########################
-
-        List<String> dataUser = io.getData("data/user_data.csv");
-
-        for (String dU : dataUser) {
+            String[] line = sF.split(";");
 
 
-            String[] dataUserline = dU.split(";");
+            // TITEL
+            String filmTitel = line[0].replaceFirst("\\W*", "");
 
-            //navn semi paswoord semi, watchlist, semi watcHED
-
-            // BRUGERNAVN
-            String userName = dataUserline[0].trim();
-
-
-            // KODE
-            String password = dataUserline[1].trim();
+            // UDGIVELSESÅR
+            int udgivelsesÅr = Integer.parseInt(line[1].trim());
 
 
-            User loadedUser = new User(userName, password);
+            // GENRE
+            String genres = line[2].trim();
 
-            // GEMTE FILM (WatchList) MEDIETITEL
-            String watchList = dataUserline[2].trim();
+            String[] genreLine = genres.split(",");
 
-            String[] titlesInWatchList = watchList.split(",");
-
-
-            for (String ttW : titlesInWatchList) {
-
-                for (AMedia aM : this.media) {
-
-                    if (ttW.equals(aM.getTitle())) {
-
-                        loadedUser.addToWatchList(aM);
-
-                    }
-
-                }
+            List<Genre> listOfGenres = addGenreToGenreList(genreLine);
 
 
-            }
-
-            // SETE FILM (WatchedList) MEDIETITEL
-            String watchedMedia = dataUserline[3].trim();
+            // RATING
+            int rating = Integer.parseInt(line[3].trim());
 
 
-            String[] titlesInWatchedMedia = watchedMedia.split(",");
+            AMedia f = new Movie(filmTitel, listOfGenres, rating, "Film", udgivelsesÅr);
 
-
-            for (String ttWM : titlesInWatchedMedia) {
-
-                for (AMedia aMW : this.media) {
-
-                    if (ttWM.equals(aMW.getTitle())) {
-
-                        loadedUser.addToWatchedMedia(aMW);
-
-                    }
-
-                }
-
-
-            }
+            media.add(f);
 
 
         }
     }
 
-
-
-        // Lauritz
-        private void userSetup () {
-            String input = ui.getInput("1) Login\n" + "2) Create new user");
-            // Asks: Login og Create user
-            if (input.equalsIgnoreCase("1")) {
-                String username = ui.getInput("Enter your username: ");
-                String password = ui.getInput("Enter your password: ");
-                // If login fails - if it doesnt, this method is over and login() has saved the currentUser
-                if (!login(password, username)) { //TODO: username, password
-                    ui.displayMessage("I Can not find that user, try again");
-                    userSetup();
-                }
-
-
-            }
-            // When creating new User
-            else if (input.equalsIgnoreCase("2")) {
-                String username = ui.getInput("Enter a username: ");
-                String password = ui.getInput("Enter a password: ");
-                User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
-                users.add(currentUser);
-            }
-            // If something went wrong - maybe exception
-            else {
-                ui.displayMessage("Please type either 1 or 2 and the press enter");
-
+    // Lauritz
+    private void userSetup () {
+        String input = ui.getInput("1) Login\n" + "2) Create new user");
+        // Asks: Login og Create user
+        if (input.equalsIgnoreCase("1")) {
+            String username = ui.getInput("Enter your username: ");
+            String password = ui.getInput("Enter your password: ");
+            // If login fails - if it doesnt, this method is over and login() has saved the currentUser
+            if (!login(password, username)) { //TODO: username, password
+                ui.displayMessage("I Can not find that user, try again");
                 userSetup();
             }
+
+
         }
+        // When creating new User
+        else if (input.equalsIgnoreCase("2")) {
+            String username = ui.getInput("Enter a username: ");
+            String password = ui.getInput("Enter a password: ");
+            User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
+            users.add(currentUser);
+        }
+        // If something went wrong - maybe exception
+        else {
+            ui.displayMessage("Please type either 1 or 2 and the press enter");
+
+            userSetup();
+        }
+    }
 
 
 
     // Lauritz
     private void mainMenu() {
-        String input = ui.getInput("Welcome " + currentUser.getName() + "\n" +
-                "Please choose one of the following options or type Q to quit:\n" +
-                "1) Search for a movie or show by title\n" +
-                "2) Search for a movie or show by genre\n" +
-                "3) Search for a movie or show by rating\n" +
-                "4) Search for a movie or show by release date\n" +
-                "5) Show your already-seen list\n" +
-                "6) Show watchlist");
-
-        // Get input and execute accordingly
         do { // Do while(true)
+            String input = ui.getInput("Welcome " + currentUser.getName() + "\n" +
+                    "Please choose one of the following options or type Q to quit:\n" +
+                    "1) Search for a movie or show by title\n" +
+                    "2) Search for a movie or show by genre\n" +
+                    "3) Search for a movie or show by rating\n" +
+                    "4) Search for a movie or show by release date\n" +
+                    "5) Show your already-seen list\n" +
+                    "6) Show watchlist");
+                
+            // Get input and execute accordingly
             switch (input) {
                 case "1":
                     // Search and display the returned collection
@@ -445,96 +425,36 @@ public class Service {
     }
 
     private Genre genreInput() {
-        //List all genres so user can choose one with a number
-        String input = ui.getInput("What genre do you want to search for?" +
-                "1) Crime\n" +
-                "2) Drama\n" +
-                "3) Sport\n" +
-                "4) Fantasy\n" +
-                "5) Romance\n" +
-                "6) Biography\n" +
-                "7) Thriller\n" +
-                "8) Mystery\n" +
-                "9) Musical\n" +
-                "10) Comedy\n" +
-                "11) Family\n" +
-                "12) Action\n" +
-                "13) Adventure\n" +
-                "14) History\n" +
-                "15) War\n" +
-                "16) Sci-Fi\n" +
-                "17) Film-Noir\n" +
-                "18) Western\n" +
-                "19) Horror\n" +
-                "20) Music\n");
-        // TODO: Maybe more genres??
+        Genre genre = null;
+        while (genre == null){
+            //List all genres so user can choose one with a number
+            String input = ui.getInput("What genre do you want to search for?\n" +
+                    "Crime\n" +
+                    "Drama\n" +
+                    "Sport\n" +
+                    "Fantasy\n" +
+                    "Romance\n" +
+                    "Biography\n" +
+                    "Thriller\n" +
+                    "Mystery\n" +
+                    "Musical\n" +
+                    "Comedy\n" +
+                    "Family\n" +
+                    "Action\n" +
+                    "Adventure\n" +
+                    "History\n" +
+                    "War\n" +
+                    "Sci-Fi\n" +
+                    "Film-Noir\n" +
+                    "Western\n" +
+                    "Horror\n" +
+                    "Music\n");
+            // TODO: Maybe more genres??
 
-        Genre genre;
-        switch (input) {
-            case "1":
-                genre = Genre.CRIME;
-                break;
-            case "2":
-                genre = Genre.DRAMA;
-                break;
-            case "3":
-                genre = Genre.SPORT;
-                break;
-            case "4":
-                genre = Genre.FANTASY;
-                break;
-            case "5":
-                genre = Genre.ROMANCE;
-                break;
-            case "6":
-                genre = Genre.BIOGRAPHY;
-                break;
-            case "7":
-                genre = Genre.THRILLER;
-                break;
-            case "8":
-                genre = Genre.MYSTERY;
-                break;
-            case "9":
-                genre = Genre.MUSICAL;
-                break;
-            case "10":
-                genre = Genre.COMEDY;
-                break;
-            case "11":
-                genre = Genre.FAMILY;
-                break;
-            case "12":
-                genre = Genre.ACTION;
-                break;
-            case "13":
-                genre = Genre.ADVENTURE;
-                break;
-            case "14":
-                genre = Genre.HISTORY;
-                break;
-            case "15":
-                genre = Genre.WAR;
-                break;
-            case "16":
-                genre = Genre.SCIFI;
-                break;
-            case "17":
-                genre = Genre.FILMNOIR;
-                break;
-            case "18":
-                genre = Genre.WESTERN;
-                break;
-            case "19":
-                genre = Genre.HORROR;
-                break;
-            case "20":
-                genre = Genre.MUSIC;
-                break;
-            default:
+            genre = gerneParser(input);
+            if(genre == null){
                 ui.displayMessage("Please type a number to search for genre");
-                genre = null;
-                genreInput();
+            }
         }
         return genre;
     }
@@ -572,22 +492,5 @@ public class Service {
             }
         }
         return ratings;
-    }
-
-    private List<AMedia> searchByRating(){
-        float rating = -1;
-        while(rating == -1){
-            try {
-                rating = Float.parseFloat(UI.getInput("Type the minimum rating you are looking for with a . as your desimal point"));
-            } catch (Exception e) {
-                UI.displayMassage("your input was not a desimal number");
-            }
-        }
-        List<AMedia> rating = new ArrayList<>();
-        for (AMedia md : media) {
-            if(md.getRating() >= rating){
-                rating.add(md);
-            }
-        }
     }
 }
