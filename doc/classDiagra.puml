@@ -1,4 +1,6 @@
+@startuml
 abstract class AMedia{
+
 	# Genre genre
 	# float rating
 
@@ -6,15 +8,16 @@ abstract class AMedia{
     + float getRating()
     + String getName
     {abstract} + String toString()
+
 }
 
 class Movie{
-	
+	- int reliceDate
 }
 
 class Series{
-	# int numSeasons
-	# int numEpisodes	
+	- int numSeasons
+	- int numEpisodes	
 }
 
 class UI {
@@ -55,7 +58,7 @@ class Service{
 	- boolean login(String username, String password)
     - List<AMedia> searchMedia(String moveName)
     - List<AMedia> searchByGenre(Genre genre)
-    - void onColse()
+    - void onClose()
 }
 note left of Service::setup
     userlogin / create user
@@ -71,7 +74,7 @@ enum Genre{
     DRAMA
     FAMILY
     ROMANCE
-    SIC-FI
+    SICFI
 }
 
 Service *-- AMedia
@@ -86,3 +89,4 @@ User *--- AMedia
 
 AMedia <|-- Movie
 AMedia <|-- Series
+@enduml
