@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import media.AMedia;
 
 public class IO {
 
@@ -33,15 +34,39 @@ public class IO {
         return data;
     }
 
-    public void saveSavedData(String path, User user) {
+    public void saveData(String path, List<User>users) {
         FileWriter writer = null;
+
         try {
+            String saveData = "";
+
+            for (User u:users) {
+                saveData += u.getName();
+                saveData += ";";
+                saveData += u.getPassword();
+                saveData += ";";
+                for (AMedia a:u.getWatchList()) {
+                    saveData += a.getTitle();
+                    saveData += ",";
+
+
+
+                }
+                saveData += ";";
+                for (AMedia a:u.getWatchedMedia()) {
+                    saveData += a.getTitle();
+                    saveData += ",";
+
+                }
+                saveData += "\n";
+            }
+
             writer = new FileWriter(path);
 
             writer.write("User, Movie \n");
 
 
-            writer.write(user.getUser() + "," + user.getMovie() + "," + user.getSerie() + "\n");
+            writer.write(saveData);
 
 
             writer.close();
@@ -53,26 +78,7 @@ public class IO {
         }
 
     }
-    public void saveWatchedData(String path, User user) {
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(path);
 
-            writer.write("User, Movie \n");
-
-
-            writer.write(user.getUser() + "," + user.getMovie() + "," + user.getSeries() + "\n");
-
-
-            writer.close();
-
-
-        } catch (IOException e) {
-
-
-        }
-
-    }
 
 }
 
