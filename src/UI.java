@@ -2,9 +2,8 @@ import java.util.Scanner;
 
 public class UI {
     Scanner scan;
-    public void TextUI (){
-
-        Scanner scan = new Scanner(System.in);
+    public UI (){
+        scan = new Scanner(System.in);
     }
     public void displayMessage(String msg){
         System.out.println(msg);

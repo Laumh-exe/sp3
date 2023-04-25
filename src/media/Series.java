@@ -9,7 +9,7 @@ public class Series extends AMedia{
     private int startDate;
     private int endDate;
 
-    public Series(String title, List<Genre> genres, int rating, String typeOfMedia, int numSeasons, List<Integer> numEpisodes, int startDate, int endDate) {
+    public Series(String title, List<Genre> genres, float rating, String typeOfMedia, int numSeasons, List<Integer> numEpisodes, int startDate, int endDate) {
         super(title, genres, rating, typeOfMedia);
         this.numSeasons  = numSeasons;
         this.numEpisodes = numEpisodes;
@@ -36,7 +36,7 @@ public class Series extends AMedia{
 
     @Override
     protected String getDate() {
-        return "Start date: " + startDate + " end date: " + endDate;
+        return "Start date: " + startDate + " end date: " + (endDate == -1 ? "ongoing" : endDate);
     }
     
 }

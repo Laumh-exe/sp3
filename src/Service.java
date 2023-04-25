@@ -11,15 +11,18 @@ import media.Series;
 
 public class Service {
     private User currentUser;
-    private UI ui;
-
+    
     private List<User> users;
     private List<AMedia> media;
-
-    private IO io = new IO();
+    
+    private final IO io = new IO();
+    private final UI ui = new UI();
 
     // Lauritz
     public Service() {
+        users = new ArrayList<>();
+        media = new ArrayList<>();
+
         // Setup data
         dataSetup();
         // Setup user and run main menu
@@ -187,7 +190,10 @@ public class Service {
             String[] splitAfStartOgSlut = startOgSlutÅrstal.split("-");
 
             int startÅr = Integer.parseInt(splitAfStartOgSlut[0]);
-            int slutÅr = Integer.parseInt(splitAfStartOgSlut[1]);
+            int slutÅr = -1;
+            if(splitAfStartOgSlut.length > 1){
+                slutÅr = Integer.parseInt(splitAfStartOgSlut[1]);
+            }
 
 
             // GENRE
@@ -199,7 +205,7 @@ public class Service {
 
 
             //RATING
-            int ratingSerie = Integer.parseInt(lineSerier[3].trim());
+            float rating = Float.parseFloat(lineSerier[3].trim().replace(',', '.'));
 
 
             // SÆSONER
@@ -226,7 +232,7 @@ public class Service {
             }
 
 
-            AMedia se = new Series(serieTitel, listOfGenresSerier, ratingSerie, "Serie", antalSæsoner, episoderIHverSæson, startÅr, slutÅr);
+            AMedia se = new Series(serieTitel, listOfGenresSerier, rating, "Serie", antalSæsoner, episoderIHverSæson, startÅr, slutÅr);
 
 
             this.media.add(se);
@@ -258,7 +264,7 @@ public class Service {
 
 
             // RATING
-            int rating = Integer.parseInt(line[3].trim());
+            float rating = Float.parseFloat(line[3].trim().replace(',', '.'));
 
 
             AMedia f = new Movie(filmTitel, listOfGenres, rating, "Film", udgivelsesÅr);
@@ -271,6 +277,7 @@ public class Service {
 
     // Lauritz
     private void userSetup() {
+        //TODO: hanle if no users exsits
         String input = ui.getInput("1) Login\n" + "2) Create new user");
         // Asks: Login og Create user
         if (input.equalsIgnoreCase("1")) {
@@ -299,14 +306,11 @@ public class Service {
                 createUser();
                 return;
 
-            } else {
-
-                String password = ui.getInput("Enter a password: ");
-                User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
-                users.add(currentUser);
-
             }
         }
+        String password = ui.getInput("Enter a password: ");
+        currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
+        users.add(currentUser);
     }
 
     // Lauritz
@@ -353,7 +357,7 @@ public class Service {
                     ui.displayMessage(currentUser.getWatchList().toString());
                     makeChoice(currentUser.getWatchList());
                 case "q":
-                    return; //TODO: exit message here or in onClose()
+                    return;
                 default:
                     ui.displayMessage("Something went wrong in main menu");
                     return;
@@ -512,7 +516,7 @@ public class Service {
 
     // Tobias
     private void onClose() {
-        io.saveData("data/userdata", users);
+        io.saveData("data/userdata.csv", users);
         ui.displayMessage("Program is closing, goodbye");
     }
 
