@@ -293,24 +293,17 @@ public class Service {
         // Lauritz
         private void userSetup () {
             String input = ui.getInput("1) Login\n" + "2) Create new user");
+
             // Asks: Login og Create user
             if (input.equalsIgnoreCase("1")) {
-                String username = ui.getInput("Enter your username: ");
-                String password = ui.getInput("Enter your password: ");
-                // If login fails - if it doesnt, this method is over and login() has saved the currentUser
-                if (!login(password, username)) { //TODO: username, password
-                    ui.displayMessage("I Can not find that user, try again");
-                    userSetup();
+
+                login();
+
                 }
 
-
-            }
             // When creating new User
             else if (input.equalsIgnoreCase("2")) {
-                String username = ui.getInput("Enter a username: ");
-                String password = ui.getInput("Enter a password: ");
-                User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
-                users.add(currentUser);
+                createUser();
             }
             // If something went wrong - maybe exception
             else {
@@ -321,6 +314,34 @@ public class Service {
         }
 
 
+    private void createUser(){
+
+        String username = ui.getInput("Enter a username: ");
+
+        for (User u: users){
+
+            if (u.getName().equals(username)){
+
+                ui.displayMessage("This username is already in use. Please select another username");
+                createUser();
+                return;
+
+            }
+
+            else {
+
+                String password = ui.getInput("Enter a password: ");
+                User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
+                users.add(currentUser);
+
+            }
+
+        }
+
+
+
+
+    }
 
     // Lauritz
     private void mainMenu() {
@@ -411,8 +432,46 @@ public class Service {
 
     // Tobias
 
-    private boolean login(String username, String password) {
-        return false;
+    private void enterPassword(User u) {
+
+        String password = ui.getInput("Enter your password: ");
+
+
+        if (u.comparePassword(password) == true) {
+
+            this.currentUser = u;
+
+            mainMenu();
+
+
+        }
+
+        else {
+
+            ui.displayMessage("You entered the wrong code. Try again");
+            enterPassword(u);
+
+
+        }
+
+    }
+    private void login() {
+
+
+        String username = ui.getInput("Enter your username: ");
+
+        for (User u: users) {
+
+            if (u.getName().equals(username)) {
+                enterPassword(u);
+
+            }
+            else {
+                ui.displayMessage("I can't find that user. Try again");
+                login();
+
+            }
+        }
     }
 
 
