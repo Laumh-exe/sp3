@@ -5,6 +5,10 @@ import java.util.List;
 
 import media.AMedia;
 import media.Genre;
+import media.Movie;
+import media.Series;
+
+
 
 public class Service {
     private User currentUser;
@@ -107,21 +111,17 @@ public class Service {
     // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
     private void dataSetup() {
 
-        // ############ USERS ##########################
-
-        //String [] dataUser = io.readFilemData("")
-
 
         // ############ FILM OG SERIER DATA ############
 
         // Data fra IO (lister med String-elementer, der skal splittes)
-        String[] dataFilm = io.readFilmData("data/film.csv");
-        String[] dataSerier = io.readFilmData("data/serier.csv");
+        List<String> dataFilm = io.getData("data/film.csv");
+        List<String> dataSerier = io.getData("data/serier.csv");
 
 
         // FILM
 
-        int filmCounter = 0;
+        //int filmCounter = 0;
 
         for (String sF : dataFilm) {
 
@@ -150,16 +150,13 @@ public class Service {
 
             AMedia f = new Movie(filmTitel, listOfGenres, rating, "Film", udgivelsesÅr);
 
+            this.media.add(f);
 
-            this.media[filmCounter] = f;
-            filmCounter++;
 
         }
 
 
         // SERIER
-        int serieCounter = 0;
-
 
         for (String sS : dataSerier) {
 
@@ -217,39 +214,112 @@ public class Service {
             AMedia se = new Series(serieTitel, listOfGenresSerier, ratingSerie, "Serie", antalSæsoner, episoderIHverSæson, startÅr, slutÅr);
 
 
-            this.media[serieCounter] = se;
-            serieCounter++;
+            this.media.add(se);
+            //this.media[serieCounter] = se;
+            //serieCounter++;
         }
 
+
+        // ############ USERS ##########################
+
+        List<String> dataUser = io.getData("data/user_data.csv");
+
+        for (String dU : dataUser) {
+
+
+            String[] dataUserline = dU.split(";");
+
+            //navn semi paswoord semi, watchlist, semi watcHED
+
+            // BRUGERNAVN
+            String userName = dataUserline[0].trim();
+
+
+            // KODE
+            String password = dataUserline[1].trim();
+
+
+            User loadedUser = new User(userName, password);
+
+            // GEMTE FILM (WatchList) MEDIETITEL
+            String watchList = dataUserline[2].trim();
+
+            String[] titlesInWatchList = watchList.split(",");
+
+
+            for (String ttW : titlesInWatchList) {
+
+                for (AMedia aM : this.media) {
+
+                    if (ttW.equals(aM.getTitle())) {
+
+                        loadedUser.addToWatchList(aM);
+
+                    }
+
+                }
+
+
+            }
+
+            // SETE FILM (WatchedList) MEDIETITEL
+            String watchedMedia = dataUserline[3].trim();
+
+
+            String[] titlesInWatchedMedia = watchedMedia.split(",");
+
+
+            for (String ttWM : titlesInWatchedMedia) {
+
+                for (AMedia aMW : this.media) {
+
+                    if (ttWM.equals(aMW.getTitle())) {
+
+                        loadedUser.addToWatchedMedia(aMW);
+
+                    }
+
+                }
+
+
+            }
+
+
+        }
     }
 
 
-    // Lauritz
-    private void userSetup() {
-        String input = ui.getInput("1) Login\n" + "2) Create new user");
-        // Asks: Login og Create user
-        if (input.equalsIgnoreCase("1")) {
-            String username = ui.getInput("Enter your username: ");
-            String password = ui.getInput("Enter your password: ");
-            // If login fails - if it doesnt, this method is over and login() has saved the currentUser
-            if (!login(password, username)) { //TODO: username, password
-                ui.displayMessage("I Can not find that user, try again");
+
+        // Lauritz
+        private void userSetup () {
+            String input = ui.getInput("1) Login\n" + "2) Create new user");
+            // Asks: Login og Create user
+            if (input.equalsIgnoreCase("1")) {
+                String username = ui.getInput("Enter your username: ");
+                String password = ui.getInput("Enter your password: ");
+                // If login fails - if it doesnt, this method is over and login() has saved the currentUser
+                if (!login(password, username)) { //TODO: username, password
+                    ui.displayMessage("I Can not find that user, try again");
+                    userSetup();
+                }
+
+
+            }
+            // When creating new User
+            else if (input.equalsIgnoreCase("2")) {
+                String username = ui.getInput("Enter a username: ");
+                String password = ui.getInput("Enter a password: ");
+                User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
+                users.add(currentUser);
+            }
+            // If something went wrong - maybe exception
+            else {
+                ui.displayMessage("Please type either 1 or 2 and the press enter");
+
                 userSetup();
             }
         }
-        // When creating new User
-        else if (input.equalsIgnoreCase("2")) {
-            String username = ui.getInput("Enter a username: ");
-            String password = ui.getInput("Enter a password: ");
-            User currentUser = new User(username, password); //TODO make sure password and username are arguments in user class, and in the same order!
-            users.add(currentUser);
-        }
-        // If something went wrong - maybe exception
-        else {
-            ui.displayMessage("Please type either 1 or 2 and the press enter");
-            userSetup();
-        }
-    }
+
 
 
     // Lauritz
@@ -282,7 +352,7 @@ public class Service {
                     // Search and display the returned collection
                     ui.displayMessage(searchByRating().toString());
                     // Show options and make choice
-                    makeChoice(searchRating());
+                    makeChoice(searchByRating());
                 case "4":
                     // Search and display the returned collection
                     ui.displayMessage(searchByReleaseDate().toString());
@@ -482,7 +552,26 @@ public class Service {
 
     // Tobias
     private void onClose() {
+        io.saveData("data/userdata", users);
+        ui.displayMessage("Program is closing, goodbye");
+    }
 
+    private List<AMedia> searchByRating(){
+        float rating = -1;
+        while(rating == -1){
+            try {
+                rating = Float.parseFloat(ui.getInput("Type the minimum rating you are looking for with a . as your decimal point"));
+            } catch (Exception e) {
+                ui.displayMessage("your input was not a decimal number");
+            }
+        }
+        List<AMedia> ratings = new ArrayList<>();
+        for (AMedia md : media) {
+            if(md.getRating() >= rating){
+                ratings.add(md);
+            }
+        }
+        return ratings;
     }
 
     private List<AMedia> searchByRating(){
