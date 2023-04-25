@@ -571,5 +571,6 @@ public class Service {
                 ratings.add(md);
             }
         }
+        return ratings;
     }
 }
