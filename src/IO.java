@@ -12,26 +12,18 @@ public class IO {
     File file;
 
     Scanner scan;
-    public ArrayList<String> getData(String path) {
+    public ArrayList<String> getData(String path) throws FileNotFoundException{
 
         file = new File(path);
         ArrayList<String> data = new ArrayList<>();
+        Scanner scan = new Scanner(file);
 
+        scan.nextLine(); // ignore header in csv
 
-        try {
-           Scanner scan = new Scanner(file);
-
-            scan.nextLine(); // ignore header in csv
-
-            while (scan.hasNextLine()) {
-                String line = scan.nextLine();
-                data.add(line);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("The file was not found");
-
+        while (scan.hasNextLine()) {
+            String line = scan.nextLine();
+            data.add(line);
         }
-
         return data;
     }
 
