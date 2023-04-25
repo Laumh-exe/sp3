@@ -482,7 +482,8 @@ public class Service {
 
     // Tobias
     private void onClose() {
-
+        io.saveData("data/userdata", users);
+        ui.displayMessage("Program is closing, goodbye");
     }
 
     private List<AMedia> searchByRating(){
