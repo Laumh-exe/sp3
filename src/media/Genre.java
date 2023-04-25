@@ -1,0 +1,23 @@
+package media;
+public enum Genre {
+    FAMILY,
+    FANTASY,
+    MUSICAL,
+    ROMANCE,
+    THRILLER,
+    WAR,
+    DRAMA,
+    BIOGRAPHY,
+    HISTORY,
+    MUSIC,
+    ACTION,
+    ADVENTURE,
+    CRIME,
+    COMEDY,
+    FILMNOIR,
+    SPORT,
+    MYSTERY,
+    SCIFI,
+    WESTERN,
+    HORROR,
+}

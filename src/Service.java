@@ -1,101 +1,46 @@
-import java.util.LinkedList;
-import java.util.List;
+
+import java.util.*;
+
+import media.AMedia;
+import media.Genre;
 
 public class Service {
-    private User currenUser;
+    private User currentUser;
+    private UI ui;
+
     private List<User> users;
     private List<AMedia> media;
 
+    private IO io = new IO();
+    
 
-    // Lauritz
-    public Service() {
-
-
+    private AMedia getReleaseDateInput(int releaseDate) {
+        for (AMedia m : media) {
+            if (m.getReleaseDate.equalsIgnoreCase(releaseDate)) {
+                return m;
+            }
+        }
+        return null;
     }
 
-
-    // Tobias
-    private void dataSetup() {
-
-
-    }
-
-
-    // Lauritz
-    private void userSetup() {
-
-        // Asks: Login og Create user
-        // Execute methods accordingly: Login or Create user
-
-    }
-
-
-    // Lauritz
-    private void mainMenu() {
-
-        /* kalder:
-
-        dataSetup()
-        userSetup()
-            viser:
-            Hovedmenu (De 4 valgmuligheder brugeren har når han/hun/hen er logget ind eller har oprettet
-            en bruger)
-
-            1) Søg efter medie
-            2) Søg efter alle medier i en kategori
-            3) Se sete medier
-            4) Se gemte medier
-
-         */
-
-
-    }
-
-
-    //Lauritz by choice
-
-    private void showMovies() {
-
-    }
-
-    //Lauritz by choice
-    private void showSeries() {
-
-    }
-
-
-    // Tobias
-
-    private boolean login(String username, String password) {
-        return false;
-    }
-
-
-    // Lauritz
-
-    private list<AMedia> searchMedia(String title) {
-        //return list
-
-
-    }
-
-    //Lauritz
-    private list<AMedia> searchByGenre(Genre genre) {
-        //return list
-    }
-
-
-    // Tobias
-    private void onClose() {
-
-    }
-
-    private Collection<AMedia> searchMediaDate() {
-        UI.displayMessage("From what year is your movie from?\n");
-        String releaseDate = UI.getInput();
+    private Collection<AMedia> searchByReleaseDate() {
+        Date releaseDateInput = null;
+        Date date = null;
         Collection<AMedia> searchResult = new HashSet<AMedia>();
         for (AMedia m : media) {
-            if (releaseDate.equalsIgnoreCase(m.getReleaseDate)) {
+            for (Date date : m.getReleaseDate()) {
+                if (date == d) {
+                    searchResult.add(m);
+                }
+            }
+        }
+        return searchResult;
+    }
+    private Collection<AMedia> searchMedia () {
+        String title = ui.getInput("What date do you want to find?\n");
+        Collection<AMedia> searchResult = new HashSet<AMedia>();
+        for (AMedia m : media) {
+            if (title.equalsIgnoreCase(m.getReleaseDate)) {
                 searchResult.add(m);
             }
         }
