@@ -349,7 +349,7 @@ public class Service {
 
     // Lauritz
 
-    private Collection searchMedia() {
+    private Collection<AMedia> searchMedia() {
         String title = ui.getInput("What title do you want to find?\n");
         Collection<AMedia> searchResult = new HashSet<AMedia>();
         for (AMedia m : media) {
