@@ -1,13 +1,14 @@
 @startuml
 abstract class AMedia{
-	# List<Genre> genres
-	# int rating
-    # String title
+
+	# Genre genre
+	# float rating
 
     + Genre getGenre()
-    + String getTitle()
-    + String toString()
-    {abstract} + String getDate()
+    + float getRating()
+    + String getName
+    {abstract} + String toString()
+
 }
 
 class Movie{

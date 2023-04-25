@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -484,5 +483,22 @@ public class Service {
     // Tobias
     private void onClose() {
 
+    }
+
+    private List<AMedia> searchByRating(){
+        float rating = -1;
+        while(rating == -1){
+            try {
+                rating = Float.parseFloat(UI.getInput("Type the minimum rating you are looking for with a . as your desimal point"));
+            } catch (Exception e) {
+                UI.displayMassage("your input was not a desimal number");
+            }
+        }
+        List<AMedia> rating = new ArrayList<>();
+        for (AMedia md : media) {
+            if(md.getRating() >= rating){
+                rating.add(md);
+            }
+        }
     }
 }
