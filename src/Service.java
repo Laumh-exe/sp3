@@ -282,7 +282,7 @@ public class Service {
                     // Search and display the returned collection
                     ui.displayMessage(searchByRating().toString());
                     // Show options and make choice
-                    makeChoice(searchRating());
+                    makeChoice(searchByRating());
                 case "4":
                     // Search and display the returned collection
                     ui.displayMessage(searchByReleaseDate().toString());
