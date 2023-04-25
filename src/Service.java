@@ -12,36 +12,25 @@ public class Service {
     private List<AMedia> media;
 
     private IO io = new IO();
-    
 
-    private AMedia getReleaseDateInput(int releaseDate) {
+
+    private AMedia getReleaseDate(int releaseDate) {
         for (AMedia m : media) {
             if (m.getReleaseDate.equalsIgnoreCase(releaseDate)) {
-                return m;
+                return m.getReleaseDate();
             }
         }
         return null;
     }
 
     private Collection<AMedia> searchByReleaseDate() {
-        Date releaseDateInput = null;
-        Date date = null;
+        Date date = getReleaseDate();
         Collection<AMedia> searchResult = new HashSet<AMedia>();
         for (AMedia m : media) {
-            for (Date date : m.getReleaseDate()) {
-                if (date == d) {
+            for (Date d : m.getReleaseDate()) {
+                if (date == d){
                     searchResult.add(m);
                 }
-            }
-        }
-        return searchResult;
-    }
-    private Collection<AMedia> searchMedia () {
-        String title = ui.getInput("What date do you want to find?\n");
-        Collection<AMedia> searchResult = new HashSet<AMedia>();
-        for (AMedia m : media) {
-            if (title.equalsIgnoreCase(m.getReleaseDate)) {
-                searchResult.add(m);
             }
         }
         return searchResult;
