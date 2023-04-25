@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,7 +25,12 @@ public class Service {
         media = new ArrayList<>();
 
         // Setup data
-        dataSetup();
+        try {
+            dataSetup();
+        } catch (FileNotFoundException e) {
+            // TODO this shuld be removed when Issue #20 is done
+            e.printStackTrace();
+        }
         // Setup user and run main menu
         userSetup();
         // Main menu - handles other methods
@@ -99,7 +105,7 @@ public class Service {
 
 
     // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
-    private void dataSetup() {
+    private void dataSetup() throws FileNotFoundException { //Todo handle this exseption
 
         // ############ FILM OG SERIER DATA ############
 
