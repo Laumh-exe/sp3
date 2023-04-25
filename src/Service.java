@@ -96,9 +96,10 @@ public class Service {
                     parsedGenres.add(Genre.HORROR);
                     break;
             }
-        return parsedGenres;
+            
         }
-
+        return parsedGenres;
+    }
 
 
     // Tobias
@@ -159,7 +160,7 @@ public class Service {
 
 
 
-    // SERIER
+        // SERIER
         int serieCounter = 0;
 
 
@@ -223,7 +224,7 @@ public class Service {
             serieCounter++;
         }
 
-
+    }
 
 
 
