@@ -496,7 +496,7 @@ public class Service {
         }
         List<AMedia> ratings = new ArrayList<>();
         for (AMedia md : media) {
-            if(md.getRating() >= ratings){
+            if(md.getRating() >= rating){
                 ratings.add(md);
             }
         }
