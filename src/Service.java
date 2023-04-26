@@ -105,7 +105,7 @@ public class Service {
 
 
     // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
-    private void dataSetup() throws FileNotFoundException { //Todo handle this exseption
+    private void dataSetup() throws FileNotFoundException { //Todo handle this exception
 
         // ############ FILM OG SERIER DATA ############
 
@@ -335,19 +335,25 @@ public class Service {
             switch (input) {
                 case "1":
                     // Search and display the returned collection
-                    ui.displayMessage(searchMedia().toString());
+                    HashSet<AMedia> foundMedia = searchMedia();
                     // Show options and make choice
-                    makeChoice(searchMedia());
+                    if (foundMedia.size() > 0) {
+                        makeChoice(foundMedia);
+                    }
+                    else {
+                        ui.displayMessage("You search had no results");
+                    }
+
                     break;
                 case "2":
                     // Search and display the returned collection
-                    ui.displayMessage(searchByGenre().toString());
+                    printMediaTitles(searchByGenre());
                     // Show options and make choice
                     makeChoice(searchByGenre());
                     break;
                 case "3":
                     // Search and display the returned collection
-                    ui.displayMessage(searchByRating().toString());
+                    printMediaTitles(searchByRating());
                     // Show options and make choice
                     makeChoice(searchByRating());
                 case "4":
@@ -383,10 +389,10 @@ public class Service {
 
     private void makeChoice(Collection media) {
         // Ask if user wants to watch or add to watchlist
-        AMedia foundMedia = getTitleInput(ui.getInput("Please type in the name of a movie or show"));
+        AMedia foundMedia = getTitleInput(ui.getInput("Please choose one of the movies/shows"));
         if (foundMedia != null) {
             String input = ui.getInput("Please choose one of the following options\n" +
-                    "1) Add to watchlist" +
+                    "1) Add to watchlist\n" +
                     "2) Watch movie");
             switch (input) {
                 case "1":
@@ -448,14 +454,20 @@ public class Service {
 
     // Lauritz
 
-    private Collection<AMedia> searchMedia() {
-        String title = ui.getInput("What title do you want to find?\n");
-        Collection<AMedia> searchResult = new HashSet<AMedia>();
+    private HashSet<AMedia> searchMedia() {
+        String title = ui.getInput("Search for title").toLowerCase();
+        HashSet<AMedia> searchResult = new HashSet<>();
         for (AMedia m : media) {
-            if (title.equalsIgnoreCase(m.getTitle())) {
-                searchResult.add(m);
+            try {
+                if (m.getTitle().toLowerCase().contains(title)) {
+                    searchResult.add(m);
+                }
+            }
+            catch (NullPointerException e) {
+                continue;
             }
         }
+        printMediaTitles(searchResult);
         return searchResult;
     }
 
@@ -512,7 +524,7 @@ public class Service {
     private AMedia getTitleInput(String title) {
         // Compare title to the titles of the search
         for (AMedia m : media) {
-            if (m.getTitle().equalsIgnoreCase(title)) {
+            if (m.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 return m;
             }
         }
@@ -542,5 +554,11 @@ public class Service {
             }
         }
         return ratings;
+    }
+
+    private void printMediaTitles(Collection<AMedia> media) {
+        for(AMedia m : media) {
+            ui.displayMessage(m.getTitle());
+        }
     }
 }
