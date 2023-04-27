@@ -210,25 +210,30 @@ public class Service {
 
     // Lauritz
     private boolean userSetup() {
-        //TODO: hanle if no users exsits
-        String input = ui.getInput("1) Login\n" + "2) Create new user\nOr Q to exit");
-        // Asks: Login og Create user
-        if (input.equalsIgnoreCase("1")) {
-            login();
-            return true;
-        }
-        // When creating new User
-        else if (input.equalsIgnoreCase("2")) {
+        if(users.size() > 0){
+            String input = ui.getInput("1) Login\n" + "2) Create new user\nOr Q to exit");
+            // Asks: Login og Create user
+            if (input.equalsIgnoreCase("1")) {
+                login();
+                return true;
+            }
+            // When creating new User
+            else if (input.equalsIgnoreCase("2")) {
+                createUser();
+                return true;
+            }
+            else if (input.equalsIgnoreCase("q")){
+                return false;
+            }
+            // If something went wrong - maybe exception
+            else {
+                ui.displayMessage("Please type either 1 or 2 and the press enter");
+                return userSetup();
+            }
+        } else {
+            ui.displayMessage("There are no users found please create a new one");
             createUser();
             return true;
-        }
-        else if (input.equalsIgnoreCase("q")){
-            return false;
-        }
-        // If something went wrong - maybe exception
-        else {
-            ui.displayMessage("Please type either 1 or 2 and the press enter");
-            return userSetup();
         }
     }
 
