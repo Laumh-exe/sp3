@@ -358,6 +358,7 @@ public class Service {
                     ui.displayMessage(currentUser.getWatchList().toString());
                     makeChoice(currentUser.getWatchList());
                 case "q":
+                case "Q":
                     return;
                 default:
                     ui.displayMessage("Something went wrong in main menu");
