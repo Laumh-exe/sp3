@@ -19,7 +19,6 @@ public class Service {
     private final IO io = new IO();
     private final UI ui = new UI();
 
-    // Lauritz
     public Service() {
         users = new ArrayList<>();
         media = new ArrayList<>();
@@ -40,7 +39,6 @@ public class Service {
         onClose();
     }
 
-
     private List<Genre> addGenreToGenreList(String[] genreStringList) {
 
         List<Genre> parsedGenres = new ArrayList<Genre>();
@@ -54,9 +52,6 @@ public class Service {
         }
         return parsedGenres;
     }
-
-
-    // Tobias
 
     private Genre gerneParser(String genreString) {
         switch (genreString.replaceFirst("\\W*", "")) {
@@ -104,8 +99,6 @@ public class Service {
         return null;
     }
 
-
-    // TODO: 24-04-2023 User data mangler at blive loaded hvis det ikke gøres i UserSetup
     private void dataSetup() throws FileNotFoundException { //Todo handle this exception
 
         // ############ FILM OG SERIER DATA ############
@@ -125,19 +118,11 @@ public class Service {
     private void formatUsersFromData(List<String> dataUser) {
         for (String userAsString : dataUser) {
 
-
             String[] dataUserline = userAsString.split(";");
-
-            //navn semi paswoord semi, watchlist, semi watcHED
-
-            // BRUGERNAVN
             String userName = dataUserline[0].trim();
-
-            // KODE
             String password = dataUserline[1].trim();
             User loadedUser = new User(userName, password);
 
-            // GEMTE FILM (WatchList) MEDIETITEL
             if(!(dataUserline.length > 2)){
                 users.add(loadedUser);
                 continue;
@@ -156,7 +141,6 @@ public class Service {
                 users.add(loadedUser);
                 continue;
             }
-            // SETE FILM (WatchedList) MEDIETITEL
             String watchedMedia = dataUserline[3].trim();
             String[] titlesInWatchedMedia = watchedMedia.split(",");
 
@@ -173,101 +157,54 @@ public class Service {
 
     private void formatSeriesDataFromString(List<String> dataSerier) {
         for (String sS : dataSerier) {
-
             String[] lineSerier = sS.split(";");
-
-            // TITEL
             String serieTitel = lineSerier[0].trim();
-
-
-            // START- OG SLUTÅRSTAL
             String startOgSlutÅrstal = lineSerier[1].trim();
-
             String[] splitAfStartOgSlut = startOgSlutÅrstal.split("-");
+            int startYear = Integer.parseInt(splitAfStartOgSlut[0]);
+            int endYear = -1;
 
-            int startÅr = Integer.parseInt(splitAfStartOgSlut[0]);
-            int slutÅr = -1;
             if(splitAfStartOgSlut.length > 1){
-                slutÅr = Integer.parseInt(splitAfStartOgSlut[1]);
+                endYear = Integer.parseInt(splitAfStartOgSlut[1]);
             }
-
-
-            // GENRE
             String genresSerie = lineSerier[2].trim();
-
             String[] genreLineSerie = genresSerie.split(",");
 
             List<Genre> listOfGenresSerier = addGenreToGenreList(genreLineSerie);
-
-
-            //RATING
             float rating = Float.parseFloat(lineSerier[3].trim().replace(',', '.'));
 
+            String seasonsAndAmoutOfEpisodes = lineSerier[4].trim();
+            String[] seasons = seasonsAndAmoutOfEpisodes.split(",");
+            int numberOfSeasons = seasons.length;
 
-            // SÆSONER
-            String sæsonerOgAntalEpisoder = lineSerier[4].trim();
+            List<Integer> episodesInEachSeason = new ArrayList<Integer>();
 
-            String[] sæsoner = sæsonerOgAntalEpisoder.split(",");
+            for (String season : seasons) {
+                String[] seasonsAndItsNumberOfEpisodes = season.split("-");
 
-
-            // Antal sæsoner
-            int antalSæsoner = sæsoner.length;
-
-
-            /* Liste hvor hvert element er et tal, der angiver antal episoder i en sæson. Første element i listen
-             er antal episoder i første sæson osv.
-             */
-            List<Integer> episoderIHverSæson = new ArrayList<Integer>();
-
-            for (String sÆs : sæsoner) {
-                String[] sæsonOgTilhørendeAntalEpisoder = sÆs.split("-");
-
-                episoderIHverSæson.add(Integer.parseInt(sæsonOgTilhørendeAntalEpisoder[1].trim()));
-
-
+                episodesInEachSeason.add(Integer.parseInt(seasonsAndItsNumberOfEpisodes[1].trim()));
             }
 
-
-            AMedia se = new Series(serieTitel, listOfGenresSerier, rating, "Serie", antalSæsoner, episoderIHverSæson, startÅr, slutÅr);
-
-
-            this.media.add(se);
-            //this.media[serieCounter] = se;
-            //serieCounter++;
+            AMedia series = new Series(serieTitel, listOfGenresSerier, rating, "Serie", numberOfSeasons, episodesInEachSeason, startYear, endYear);
+            media.add(series);
         }
     }
 
-    private void formatMoviesDataFromString(List<String> dataFilm) {
-        for (String sF : dataFilm) {
+    private void formatMoviesDataFromString(List<String> filmData) {
+        for (String aFilm : filmData) {
 
 
-            String[] line = sF.split(";");
+            String[] line = aFilm.split(";");
 
-
-            // TITEL
             String filmTitel = line[0].replaceFirst("\\W*", "");
-
-            // UDGIVELSESÅR
-            int udgivelsesÅr = Integer.parseInt(line[1].trim());
-
-
-            // GENRE
+            int reliceYear = Integer.parseInt(line[1].trim());
             String genres = line[2].trim();
-
             String[] genreLine = genres.split(",");
-
             List<Genre> listOfGenres = addGenreToGenreList(genreLine);
-
-
-            // RATING
             float rating = Float.parseFloat(line[3].trim().replace(',', '.'));
+            AMedia movie = new Movie(filmTitel, listOfGenres, rating, "Film", reliceYear);
 
-
-            AMedia f = new Movie(filmTitel, listOfGenres, rating, "Film", udgivelsesÅr);
-
-            media.add(f);
-
-
+            media.add(movie);
         }
     }
 
