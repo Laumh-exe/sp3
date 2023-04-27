@@ -50,14 +50,14 @@ public class IO {
                 saveData += ";";
                 for (AMedia a : u.getWatchList()) {
                     saveData += a.getTitle();
-                    saveData += ",";
+                    saveData += ":";
 
 
                 }
                 saveData += ";";
                 for (AMedia a : u.getWatchedMedia()) {
                     saveData += a.getTitle();
-                    saveData += ",";
+                    saveData += ":";
 
                 }
                 saveData += "\n";

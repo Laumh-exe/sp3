@@ -128,7 +128,7 @@ public class Service {
                 continue;
             }
             String watchList = dataUserline[2].trim();
-            String[] titlesInWatchList = watchList.split(",");
+            String[] titlesInWatchList = watchList.split(":");
             for (String titel : titlesInWatchList) {
                 for (AMedia aMedia : media) {
                     if (titel.equals(aMedia.getTitle())) {
@@ -142,7 +142,7 @@ public class Service {
                 continue;
             }
             String watchedMedia = dataUserline[3].trim();
-            String[] titlesInWatchedMedia = watchedMedia.split(",");
+            String[] titlesInWatchedMedia = watchedMedia.split(":");
 
             for (String titel : titlesInWatchedMedia) {
                 for (AMedia aMedia : this.media) {
