@@ -397,36 +397,13 @@ public class Service {
     //Lauritz by choice
 
     private void makeChoice(Collection<AMedia> media) {
-
         if (media.size() < 2) {
-
             addOrWatchMedia(media.iterator().next());
-
         } else {
-
-
             // Ask if user wants to watch or add to watchlist
             AMedia foundMedia = getTitleInput(ui.getInput("Please choose one of the movies/shows"));
-
             if (foundMedia != null) {
-
                 addOrWatchMedia(foundMedia);
-
-
-                /*String input = ui.getInput("Please choose one of the following options\n" +
-                        "1) Add to watchlist\n" +
-                        "2) Watch movie");
-                switch (input) {
-                    case "1":
-                        ui.displayMessage("Adding " + foundMedia.getTitle() + " to watchlist");
-                        currentUser.addToWatchList(foundMedia);
-                        break;
-                    case "2":
-                        ui.displayMessage("Watching " + foundMedia.getTitle());
-                        currentUser.addToWatchedMedia(foundMedia);
-                }
-
-                 */
             } else {
                 ui.displayMessage("The title did not match any existing titles");
             }
