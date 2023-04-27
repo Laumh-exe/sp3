@@ -12,41 +12,50 @@ public class IO {
     File file;
 
     Scanner scan;
-    public ArrayList<String> getData(String path) throws FileNotFoundException{
+    public ArrayList<String> getData(String path) throws FileNotFoundException {
 
-        file = new File(path);
         ArrayList<String> data = new ArrayList<>();
-        Scanner scan = new Scanner(file);
+        try {
+            file = new File(path);
 
-        scan.nextLine(); // ignore header in csv
 
-        while (scan.hasNextLine()) {
-            String line = scan.nextLine();
-            data.add(line);
+            Scanner scan = new Scanner(file);
+
+            scan.nextLine(); // ignore header in csv
+
+
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                data.add(line);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println(path + " was not found ");
         }
         return data;
     }
 
-    public void saveData(String path, List<User>users) {
+
+
+    public void saveData (String path, List <User> users){
         FileWriter writer = null;
 
         try {
             String saveData = "";
 
-            for (User u:users) {
+            for (User u : users) {
                 saveData += u.getName();
                 saveData += ";";
                 saveData += u.getPassword();
                 saveData += ";";
-                for (AMedia a:u.getWatchList()) {
+                for (AMedia a : u.getWatchList()) {
                     saveData += a.getTitle();
                     saveData += ",";
 
 
-
                 }
                 saveData += ";";
-                for (AMedia a:u.getWatchedMedia()) {
+                for (AMedia a : u.getWatchedMedia()) {
                     saveData += a.getTitle();
                     saveData += ",";
 
@@ -66,14 +75,13 @@ public class IO {
 
 
         } catch (IOException e) {
-
-
+            e.getMessage();
         }
 
     }
 
-
 }
+
 
 
 
