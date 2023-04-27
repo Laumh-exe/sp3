@@ -166,6 +166,7 @@ public class Service {
                     }
                 }
             }
+            users.add(loadedUser);
         }
     }
 
