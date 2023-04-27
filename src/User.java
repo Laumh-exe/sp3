@@ -48,4 +48,19 @@ public class User {
     public Set<AMedia> getWatchList(){
         return watchList;
     }
+
+    public String watchListToString() {
+        String watchListToString = "";
+        for(AMedia media:watchList) {
+            watchListToString += media.getTitle();
+        }
+        return watchListToString;
+    }
+    public String watchedMediaToString() {
+        String watchedListToString = "";
+        for(AMedia media:watchedMedia) {
+            watchedListToString += media.getTitle();
+        }
+        return watchedListToString;
+    }
 }
