@@ -454,7 +454,7 @@ public class Service {
         }
         return null;
     }
-    
+
     private void onClose() {
         io.saveData("data/userdata.csv", users);
         ui.displayMessage("Program is closing, goodbye");
