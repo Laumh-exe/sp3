@@ -314,15 +314,6 @@ public class Service {
         while (true);
     }
 
-
-    //Lauritz by choice
-
-    private void showMedia() {
-
-    }
-
-
-
     private void addOrWatchMedia (AMedia media) {
 
         String input = ui.getInput("Please choose one of the following options\n" +
@@ -340,18 +331,16 @@ public class Service {
         }
     }
 
-    //Lauritz by choice
-
     private void makeChoice(Collection<AMedia> media) {
         if(media.size() == 0) {
             ui.displayMessage("No media was found");
             return;
         }
-        if (media.size() < 2) {
+        if (media.size() == 1) {
             addOrWatchMedia(media.iterator().next());
         } else {
             // Ask if user wants to watch or add to watchlist
-            AMedia foundMedia = getTitleInput(ui.getInput("Please choose one of the movies/shows"));
+            AMedia foundMedia = getTitleInput(ui.getInput("Please choose one of the movies/shows"), media);
             if (foundMedia != null) {
                 addOrWatchMedia(foundMedia);
             } else {
@@ -360,9 +349,6 @@ public class Service {
         }
     }
 
-    // Tobias
-
-    
     private void login() {
         
         
@@ -391,8 +377,6 @@ public class Service {
         }
 
     }
-    
-    // Lauritz
 
     private HashSet<AMedia> searchMedia() {
         String title = ui.getInput("Search for title").toLowerCase();
@@ -412,7 +396,6 @@ public class Service {
         return searchResult;
     }
 
-    //Lauritz
     private Collection<AMedia> searchByGenre() {
         Genre genre = genreInput();
         Collection<AMedia> searchResult = new HashSet<AMedia>();
@@ -462,7 +445,7 @@ public class Service {
         return genre;
     }
 
-    private AMedia getTitleInput(String title) {
+    private AMedia getTitleInput(String title, Collection<AMedia> media) {
         // Compare title to the titles of the search
         for (AMedia m : media) {
             if (m.getTitle().toLowerCase().contains(title.toLowerCase())) {
@@ -471,9 +454,7 @@ public class Service {
         }
         return null;
     }
-
-
-    // Tobias
+    
     private void onClose() {
         io.saveData("data/userdata.csv", users);
         ui.displayMessage("Program is closing, goodbye");
