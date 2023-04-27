@@ -253,9 +253,9 @@ public class Service {
 
     // Lauritz
     private void mainMenu() {
+        ui.displayMessage("Welcome " + currentUser.getName());
         do { // Do while(true)
-            String input = ui.getInput("Welcome " + currentUser.getName() + "\n" +
-                    "Please choose one of the following options or type Q to quit:\n" +
+            String input = ui.getInput("Please choose one of the following options or type Q to quit:\n" +
                     "1) Search for a movie or show by title\n" +
                     "2) Search for a movie or show by genre\n" +
                     "3) Search for a movie or show by rating\n" +
@@ -296,12 +296,13 @@ public class Service {
                     // Show options and make choice
                     // makeChoice(searchByReleaseDate());
                 case "5":
-                    ui.displayMessage(currentUser.getWatchedMedia().toString());
+                    ui.displayMessage(currentUser.watchedMediaToString());
                     makeChoice(currentUser.getWatchedMedia());
                     break;
                 case "6":
-                    ui.displayMessage(currentUser.getWatchList().toString());
+                    ui.displayMessage(currentUser.watchListToString());
                     makeChoice(currentUser.getWatchList());
+                    break;
                 case "q":
                 case "Q":
                     return;
@@ -342,6 +343,10 @@ public class Service {
     //Lauritz by choice
 
     private void makeChoice(Collection<AMedia> media) {
+        if(media.size() == 0) {
+            ui.displayMessage("No media was found");
+            return;
+        }
         if (media.size() < 2) {
             addOrWatchMedia(media.iterator().next());
         } else {
