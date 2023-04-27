@@ -336,15 +336,17 @@ public class Service {
                     break;
                 case "2":
                     // Search and display the returned collection
-                    printMediaTitles(searchByGenre());
+                    Collection<AMedia> genreResult = searchByGenre();
+                    printMediaTitles(genreResult);
                     // Show options and make choice
-                    makeChoice(searchByGenre());
+                    makeChoice(genreResult);
                     break;
                 case "3":
                     // Search and display the returned collection
-                    printMediaTitles(searchByRating());
+                    Collection<AMedia> ratingResult = searchByRating();
+                    printMediaTitles(ratingResult);
                     // Show options and make choice
-                    makeChoice(searchByRating());
+                    makeChoice(ratingResult);
                 case "4":
                     // Search and display the returned collection
                     //ui.displayMessage(searchByReleaseDate().toString());
