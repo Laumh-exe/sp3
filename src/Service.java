@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import javafx.scene.AmbientLight;
 import media.AMedia;
 import media.Genre;
 import media.Movie;
@@ -122,60 +123,48 @@ public class Service {
     }
 
     private void formatUsersFromData(List<String> dataUser) {
-        for (String dU : dataUser) {
+        for (String userAsString : dataUser) {
 
 
-            String[] dataUserline = dU.split(";");
+            String[] dataUserline = userAsString.split(";");
 
             //navn semi paswoord semi, watchlist, semi watcHED
 
             // BRUGERNAVN
             String userName = dataUserline[0].trim();
 
-
             // KODE
             String password = dataUserline[1].trim();
-
-
             User loadedUser = new User(userName, password);
 
             // GEMTE FILM (WatchList) MEDIETITEL
-            String watchList = dataUserline[2].trim();
-
-            String[] titlesInWatchList = watchList.split(",");
-
-
-            for (String ttW : titlesInWatchList) {
-
-                for (AMedia aM : this.media) {
-
-                    if (ttW.equals(aM.getTitle())) {
-
-                        loadedUser.addToWatchList(aM);
-
-                    }
-
-                }
-
-
+            if(!(dataUserline.length > 2)){
+                users.add(loadedUser);
+                return;
             }
-
+            String watchList = dataUserline[2].trim();
+            String[] titlesInWatchList = watchList.split(",");
+            for (String titel : titlesInWatchList) {
+                for (AMedia aMedia : media) {
+                    if (titel.equals(aMedia.getTitle())) {
+                        loadedUser.addToWatchList(aMedia);
+                    }
+                }
+            }
+            
+            if(!(dataUserline.length > 3)){
+                users.add(loadedUser);
+                return;
+            }
             // SETE FILM (WatchedList) MEDIETITEL
             String watchedMedia = dataUserline[3].trim();
-
             String[] titlesInWatchedMedia = watchedMedia.split(",");
 
-
-            for (String ttWM : titlesInWatchedMedia) {
-
-                for (AMedia aMW : this.media) {
-
-                    if (ttWM.equals(aMW.getTitle())) {
-
-                        loadedUser.addToWatchedMedia(aMW);
-
+            for (String titel : titlesInWatchedMedia) {
+                for (AMedia aMedia : this.media) {
+                    if (titel.equals(aMedia.getTitle())) {
+                        loadedUser.addToWatchedMedia(aMedia);
                     }
-
                 }
             }
         }
