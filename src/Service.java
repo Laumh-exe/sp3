@@ -320,29 +320,40 @@ public class Service {
 
     }
 
-    //Lauritz by choice
 
-    private void makeChoice(Collection media) {
-        // Ask if user wants to watch or add to watchlist
-        AMedia foundMedia = getTitleInput(ui.getInput("Please choose one of the movies/shows"));
-        if (foundMedia != null) {
-            String input = ui.getInput("Please choose one of the following options\n" +
-                    "1) Add to watchlist\n" +
-                    "2) Watch movie");
-            switch (input) {
-                case "1":
-                    ui.displayMessage("Adding " + foundMedia.getTitle() + " to watchlist");
-                    currentUser.addToWatchList(foundMedia);
-                    break;
-                case "2":
-                    ui.displayMessage("Watching " + foundMedia.getTitle());
-                    currentUser.addToWatchedMedia(foundMedia);
-            }
-        } else {
-            ui.displayMessage("The title did not match any existing titles");
+
+    private void addOrWatchMedia (AMedia media) {
+
+        String input = ui.getInput("Please choose one of the following options\n" +
+                "1) Add to watchlist\n" +
+                "2) Watch movie");
+
+        switch (input) {
+            case "1":
+                ui.displayMessage("Adding " + media.getTitle() + " to watchlist");
+                currentUser.addToWatchList(media);
+                break;
+            case "2":
+                ui.displayMessage("Watching " + media.getTitle());
+                currentUser.addToWatchedMedia(media);
         }
     }
 
+    //Lauritz by choice
+
+    private void makeChoice(Collection<AMedia> media) {
+        if (media.size() < 2) {
+            addOrWatchMedia(media.iterator().next());
+        } else {
+            // Ask if user wants to watch or add to watchlist
+            AMedia foundMedia = getTitleInput(ui.getInput("Please choose one of the movies/shows"));
+            if (foundMedia != null) {
+                addOrWatchMedia(foundMedia);
+            } else {
+                ui.displayMessage("The title did not match any existing titles");
+            }
+        }
+    }
 
     // Tobias
 
@@ -381,6 +392,7 @@ public class Service {
     private HashSet<AMedia> searchMedia() {
         String title = ui.getInput("Search for title").toLowerCase();
         HashSet<AMedia> searchResult = new HashSet<>();
+
         for (AMedia m : media) {
             try {
                 if (m.getTitle().toLowerCase().contains(title)) {
