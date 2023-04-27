@@ -32,9 +32,10 @@ public class Service {
             e.printStackTrace();
         }
         // Setup user and run main menu
-        userSetup();
-        // Main menu - handles other methods
-        mainMenu();
+        if(userSetup()){
+            // Main menu - handles other methods
+            mainMenu();
+        }
         // Closes when mainMenu is exited
         onClose();
     }
@@ -139,7 +140,7 @@ public class Service {
             // GEMTE FILM (WatchList) MEDIETITEL
             if(!(dataUserline.length > 2)){
                 users.add(loadedUser);
-                return;
+                continue;
             }
             String watchList = dataUserline[2].trim();
             String[] titlesInWatchList = watchList.split(",");
@@ -153,7 +154,7 @@ public class Service {
             
             if(!(dataUserline.length > 3)){
                 users.add(loadedUser);
-                return;
+                continue;
             }
             // SETE FILM (WatchedList) MEDIETITEL
             String watchedMedia = dataUserline[3].trim();
@@ -271,21 +272,26 @@ public class Service {
     }
 
     // Lauritz
-    private void userSetup() {
+    private boolean userSetup() {
         //TODO: hanle if no users exsits
-        String input = ui.getInput("1) Login\n" + "2) Create new user");
+        String input = ui.getInput("1) Login\n" + "2) Create new user\nOr Q to exit");
         // Asks: Login og Create user
         if (input.equalsIgnoreCase("1")) {
             login();
+            return true;
         }
         // When creating new User
         else if (input.equalsIgnoreCase("2")) {
             createUser();
+            return true;
+        }
+        else if (input.equalsIgnoreCase("q")){
+            return false;
         }
         // If something went wrong - maybe exception
         else {
             ui.displayMessage("Please type either 1 or 2 and the press enter");
-            userSetup();
+            return userSetup();
         }
     }
 
@@ -401,47 +407,36 @@ public class Service {
 
     // Tobias
 
-    private void enterPassword(User u) {
-
-        String password = ui.getInput("Enter your password: ");
-
-
-        if (u.comparePassword(password) == true) {
-
-            this.currentUser = u;
-
-            mainMenu();
-
-
-        } else {
-
-            ui.displayMessage("You entered the wrong code. Try again");
-            enterPassword(u);
-
-
-        }
-
-    }
-
+    
     private void login() {
-
-
+        
+        
         String username = ui.getInput("Enter your username: ");
-
+        
         for (User u : users) {
 
             if (u.getName().equals(username)) {
                 enterPassword(u);
-
-            } else {
-                ui.displayMessage("I can't find that user. Try again");
-                login();
-
+                return;
             }
         }
+        ui.displayMessage("I can't find that user. Try again");
+        login();
     }
+    
+    private void enterPassword(User loginUser) {
 
+        String password = ui.getInput("Enter your password: ");
 
+        if (loginUser.comparePassword(password) == true) {
+            currentUser = loginUser;
+        } else {
+            ui.displayMessage("You entered the wrong code. Try again");
+            enterPassword(loginUser);
+        }
+
+    }
+    
     // Lauritz
 
     private HashSet<AMedia> searchMedia() {
