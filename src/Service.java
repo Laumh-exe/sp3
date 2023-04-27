@@ -264,9 +264,8 @@ public class Service {
                     "1) Search for a movie or show by title\n" +
                     "2) Search for a movie or show by genre\n" +
                     "3) Search for a movie or show by rating\n" +
-                    "4) Search for a movie or show by release date\n" +
-                    "5) Show your already-seen list\n" +
-                    "6) Show watchlist");
+                    "4) Show your already-seen list\n" +
+                    "5) Show watchlist");
 
             // Get input and execute accordingly
             switch (input) {
@@ -295,16 +294,12 @@ public class Service {
                     printMediaTitles(ratingResult);
                     // Show options and make choice
                     makeChoice(ratingResult);
+                    break;
                 case "4":
-                    // Search and display the returned collection
-                    //ui.displayMessage(searchByReleaseDate().toString());
-                    // Show options and make choice
-                    // makeChoice(searchByReleaseDate());
-                case "5":
                     ui.displayMessage(currentUser.watchedMediaToString());
                     makeChoice(currentUser.getWatchedMedia());
                     break;
-                case "6":
+                case "5":
                     ui.displayMessage(currentUser.watchListToString());
                     makeChoice(currentUser.getWatchList());
                     break;
@@ -313,7 +308,7 @@ public class Service {
                     return;
                 default:
                     ui.displayMessage("Something went wrong in main menu");
-                    return;
+                    break;
             }
         }
         while (true);

@@ -52,14 +52,14 @@ public class User {
     public String watchListToString() {
         String watchListToString = "";
         for(AMedia media:watchList) {
-            watchListToString += media.getTitle();
+            watchListToString += media.getTitle() + "\n";
         }
         return watchListToString;
     }
     public String watchedMediaToString() {
         String watchedListToString = "";
         for(AMedia media:watchedMedia) {
-            watchedListToString += media.getTitle();
+            watchedListToString += media.getTitle() + "\n";
         }
         return watchedListToString;
     }
