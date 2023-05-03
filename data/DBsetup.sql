@@ -19,14 +19,14 @@ CREATE TABLE genres(
 );
 CREATE TABLE movies(
     ID INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR(45) NOT NULL,
+    title VARCHAR(100) NOT NULL,
     year INT NOT NULL,
     rating FLOAT NOT NULL,
     PRIMARY KEY (ID)
 );
 CREATE TABLE series(
     ID INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR(45) NOT NULL,
+    title VARCHAR(100) NOT NULL,
     startyear INT NOT NULL,
     endyear INT,
     rating FLOAT NOT NULL,
