@@ -53,8 +53,10 @@ public class Series extends AMedia{
         stmt.setFloat(4, rating);
         stmt.executeUpdate();
         stmt.close();
-
         for (Genre genre : genres) {
+            if(genre == null){
+                continue;
+            }
             String genreRelationSql = "INSERT INTO series_genre(seriesID, genreID)\nSELECT seriesID, ? FROM (SELECT ID AS seriesID FROM series WHERE title = ?) subTable    ";
             PreparedStatement relationStmt = conn.prepareStatement(genreRelationSql);
             relationStmt.setInt(1, (genre.ordinal()+1));

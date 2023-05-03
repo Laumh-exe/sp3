@@ -32,6 +32,9 @@ public class Movie extends AMedia {
         stmt.close();
 
         for (Genre genre : genres) {
+            if(genre == null){
+                continue;
+            }
             String genreRelationSql = "INSERT INTO movie_genre(movieID, genreID)\nSELECT movieID, ? FROM (SELECT ID AS movieID FROM movies WHERE title = ?) subTable    ";
             PreparedStatement relationStmt = conn.prepareStatement(genreRelationSql);
             relationStmt.setInt(1, (genre.ordinal()+1));
