@@ -2,13 +2,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import media.AMedia;
 
 public class IO {
+    // database URL
+    static final String DB_URL = "jdbc:mysql://localhost/world";
 
+    //  Database credentials
+    static final String USER = "root";
+    static final String PASS = "4&G3#n&7552b44";
     File file;
 
     Scanner scan;
@@ -33,6 +39,157 @@ public class IO {
             System.out.println(path + " was not found ");
         }
         return data;
+    }
+
+    public ArrayList<String> readMovieDataFromDB(String query) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ArrayList<String> dataList = new ArrayList<>();
+        try{
+            //STEP 1: Register JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+
+            //STEP 2: Open a connection
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            //STEP 3: Execute a query
+            System.out.println("Creating statement...");
+            String sql = query; //Here: whatever query the method is called with - How to use
+            stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+            String currentMovie = "";
+            String data = "";
+            float rating = 0;
+            int iDCounter = rs.getInt("ID");
+            //STEP 4: Extract data from result set
+            while(rs.next()){
+                // Do last
+                // Add data
+                int iD = rs.getInt("ID");
+                if(iDCounter != iD) {
+                    data = data.substring(0,data.length()-1);
+                    data += "; " + rating + ";";
+                    dataList.add(data);
+                    data = "";
+                }
+                iDCounter = iD;
+
+                // Do first
+                if (currentMovie != rs.getString("Title")) {
+                    data += rs.getString("Title") + "; ";
+                    data += rs.getInt("Release Date") + "; ";
+                    currentMovie = rs.getString("Title");
+                }
+                // Do for every row
+                if(iDCounter == iD) {
+                    data += rs.getString("Genre") + ", "; //TODO : Get genre list in correct string
+                }
+                rating = rs.getFloat("Rating");
+            }
+//STEP 5: Clean-up environment
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+            }catch(SQLException se2){
+            }// nothing we can do
+            try{
+                if(conn!=null)
+                    conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+        return dataList;
+    }
+
+    public ArrayList<String> readSeriesDataFromDB(String query) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ArrayList<String> dataList = new ArrayList<>();
+        try{
+            //STEP 1: Register JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+
+            //STEP 2: Open a connection
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            //STEP 3: Execute a query
+            System.out.println("Creating statement...");
+            String sql = query; //Here: whatever query the method is called with - How to use
+            stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+            String currentMovie = "";
+            String data = "";
+            float rating = 0;
+            int iDCounter = rs.getInt("ID");
+            //STEP 4: Extract data from result set
+            while(rs.next()){
+                // Do last
+                // Add data
+                int iD = rs.getInt("ID");
+                if(iDCounter != iD) {
+                    data = data.substring(0,data.length()-1);
+                    data += "; " + rating + ";";
+                    dataList.add(data);
+                    data = "";
+                }
+                iDCounter = iD;
+
+                // Do first
+                if (currentMovie != rs.getString("Title")) {
+                    data += rs.getString("Title") + "; ";
+                    data += rs.getInt("Startdate") + "-";
+                    data += rs.getInt("endyear") + "; ";
+                    currentMovie = rs.getString("Title");
+                }
+                // Do for every row
+                if(iDCounter == iD) {
+                    data += rs.getString("Genre") + ", "; //TODO : Get genre list in correct string
+                }
+                rating = rs.getFloat("Rating");
+            }
+            //STEP 5: Clean-up environment
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+            }catch(SQLException se2){
+            }// nothing we can do
+            try{
+                if(conn!=null)
+                    conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+        return dataList;
     }
 
 
@@ -79,7 +236,6 @@ public class IO {
         }
 
     }
-
 }
 
 
