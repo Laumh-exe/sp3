@@ -101,7 +101,7 @@ public class IO {
 
             for (ISavable toSave : savables) {
                 int linesEffected = toSave.update(conn);
-                if(linesEffected >= 0){
+                if(linesEffected == 0){
                     toSave.create(conn);
                 }
             }
