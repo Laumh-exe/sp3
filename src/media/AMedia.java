@@ -2,12 +2,12 @@ package media;
 
 import java.util.List;
 
-public abstract class AMedia{
+public abstract class AMedia implements ISavable{
     
-    private String title;
-    private String typeOfMedia;
-    private List<Genre> genres;
-    private float rating;
+    protected String title;
+    protected String typeOfMedia;
+    protected List<Genre> genres;
+    protected float rating;
 
     public AMedia(String title, List<Genre> genres, Float rating, String typeOfMedia){
         this.typeOfMedia = typeOfMedia;
@@ -50,5 +50,6 @@ public abstract class AMedia{
      * @return date(s)
      */
     protected abstract String getDate();
+
 
 }
