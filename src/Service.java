@@ -8,6 +8,7 @@ import media.AMedia;
 import media.Genre;
 import media.Movie;
 import media.Series;
+import java.sql.*;
 
 
 public class Service {
@@ -101,21 +102,41 @@ public class Service {
 
     private void dataSetup() throws FileNotFoundException { //Todo handle this exception
 
+
+
+
         // ############ FILM OG SERIER DATA ############
+
+
 
         // Data fra IO (lister med String-elementer, der skal splittes)
         List<String> dataFilm = io.getData("data/film.csv");
         List<String> dataSerier = io.getData("data/serier.csv");
-        List<String> dataUser = io.getData("data/userdata.csv");
+        //List<String> dataUser = io.getData("data/userdata.csv");
+        List<String> dataUser = io.readUserDatafromDB();
+
+
+        //#####################TESTING"#######################
+
+       for (String ud : dataUser) {
+            System.out.println(ud);
+
+        }
+
+
+
         // FILM
         formatMoviesDataFromString(dataFilm);
         // SERIER
         formatSeriesDataFromString(dataSerier);
+
+
         // ############ USERS ##########################
         formatUsersFromData(dataUser);
     }
 
     private void formatUsersFromData(List<String> dataUser) {
+
         for (String userAsString : dataUser) {
 
             String[] dataUserline = userAsString.split(";");
@@ -156,6 +177,7 @@ public class Service {
     }
 
     private void formatSeriesDataFromString(List<String> dataSerier) {
+
         for (String sS : dataSerier) {
             String[] lineSerier = sS.split(";");
             String serieTitel = lineSerier[0].trim();
@@ -352,6 +374,7 @@ public class Service {
         } else {
             // Ask if user wants to watch or add to watchlist
             AMedia foundMedia = getTitleInput(ui.getInput("Please choose one of the movies/shows"));
+
             if (foundMedia != null) {
                 addOrWatchMedia(foundMedia);
             } else {
@@ -364,6 +387,8 @@ public class Service {
 
     
     private void login() {
+
+        // DATABASE ##############################################################
         
         
         String username = ui.getInput("Enter your username: ");
@@ -378,6 +403,10 @@ public class Service {
         ui.displayMessage("I can't find that user. Try again");
         login();
     }
+
+
+
+
     
     private void enterPassword(User loginUser) {
 
@@ -386,7 +415,7 @@ public class Service {
         if (loginUser.comparePassword(password) == true) {
             currentUser = loginUser;
         } else {
-            ui.displayMessage("You entered the wrong code. Try again");
+            ui.displayMessage("You entered the wrong password. Try again");
             enterPassword(loginUser);
         }
 
@@ -409,13 +438,19 @@ public class Service {
             }
         }
         printMediaTitles(searchResult);
+
         return searchResult;
     }
 
     //Lauritz
     private Collection<AMedia> searchByGenre() {
+
+        // DATABASE###################################################
+
         Genre genre = genreInput();
+
         Collection<AMedia> searchResult = new HashSet<AMedia>();
+
         for (AMedia m : media) {
             for (Genre g : m.getGenres()) {
                 if (genre == g) {
@@ -426,6 +461,7 @@ public class Service {
         }
         return searchResult;
     }
+
 
     private Genre genreInput() {
         Genre genre = null;
@@ -464,6 +500,7 @@ public class Service {
 
     private AMedia getTitleInput(String title) {
         // Compare title to the titles of the search
+
         for (AMedia m : media) {
             if (m.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 return m;
@@ -475,6 +512,9 @@ public class Service {
 
     // Tobias
     private void onClose() {
+
+        // DATABASE###################################################
+
         io.saveData("data/userdata.csv", users);
         ui.displayMessage("Program is closing, goodbye");
     }

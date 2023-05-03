@@ -37,14 +37,17 @@ public class User {
         watchedMedia.add(media);
     }
 
+
     public Set<AMedia> getWatchedMedia(){
         return watchedMedia;
     }
 
+
     public void addToWatchList(AMedia media){
         watchList.add(media);
     }
-    
+
+
     public Set<AMedia> getWatchList(){
         return watchList;
     }
