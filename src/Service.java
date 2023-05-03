@@ -6,6 +6,7 @@ import java.util.List;
 
 import media.AMedia;
 import media.Genre;
+import media.ISavable;
 import media.Movie;
 import media.Series;
 
@@ -457,6 +458,7 @@ public class Service {
 
     private void onClose() {
         io.saveData("data/userdata.csv", users);
+        io.saveToDB(new ArrayList<ISavable>(media));
         ui.displayMessage("Program is closing, goodbye");
     }
 
