@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import media.AMedia;
@@ -116,7 +117,7 @@ public class IO {
         return dataList;
     }
 
-    public ArrayList<String> readSeriesDataFromDB(String query) {
+    /* public ArrayList<String> readSeriesDataFromDB(String query) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ArrayList<String> dataList = new ArrayList<>();
@@ -135,35 +136,36 @@ public class IO {
 
             ResultSet rs = stmt.executeQuery();
 
-            String currentMovie = "";
+            String currentMovie = rs.getString("title");
             String data = "";
-            float rating = 0;
-            int iDCounter = rs.getInt("ID");
+            float rating;
+            String title = "";
+            String run = ""; // Release date +  end date( if there is one)
+            HashSet<String> genres = new HashSet<>();
+            HashSet<String> seasonsAndEpisodes =  new HashSet<>();
+
+            String seasons = "";
             //STEP 4: Extract data from result set
             while(rs.next()){
-                // Do last
-                // Add data
-                int iD = rs.getInt("ID");
-                if(iDCounter != iD) {
-                    data = data.substring(0,data.length()-1);
-                    data += "; " + rating + ";";
-                    dataList.add(data);
-                    data = "";
-                }
-                iDCounter = iD;
+                // IF CURRENTMOVIE IS NOT THE SAME
+                    // Save title, startdate, releaseDate, in data String
+                        // Check if endDate == -1 (if it is, then there is not end date set)
+                    // Then add genres from hashset to data String with a for-each loop
+                    // now add seasons/episodes to data String with a for-each loop
+                    // save the data in array list and save current movie as whatever the title is now - now we move on to next film:
 
-                // Do first
-                if (currentMovie != rs.getString("Title")) {
-                    data += rs.getString("Title") + "; ";
-                    data += rs.getInt("Startdate") + "-";
-                    data += rs.getInt("endyear") + "; ";
-                    currentMovie = rs.getString("Title");
+                // Check if currentmovie is the same as title if it is do the following:
+                // save title, startDate, releaseDate, rating in variables for use later
+                // save genres in hashset,
+                // save seasons with episode as string in hashset
+
+                if(!currentMovie.equalsIgnoreCase(rs.getString("title"))) {
+
                 }
-                // Do for every row
-                if(iDCounter == iD) {
-                    data += rs.getString("Genre") + ", "; //TODO : Get genre list in correct string
+                else {
+                    title = rs.getString("Title");
+                    run += rs.getint("startYear"); // TODO :
                 }
-                rating = rs.getFloat("Rating");
             }
             //STEP 5: Clean-up environment
             rs.close();
@@ -190,7 +192,7 @@ public class IO {
             }//end finally try
         }//end try
         return dataList;
-    }
+    } */
 
 
 
