@@ -57,7 +57,7 @@ public class Series extends AMedia{
             if(genre == null){
                 continue;
             }
-            String genreRelationSql = "INSERT INTO series_genre(seriesID, genreID)\nSELECT seriesID, ? FROM (SELECT ID AS seriesID FROM series WHERE title = ?) subTable    ";
+            String genreRelationSql = "INSERT INTO series_genre(seriesID, genreID)\nSELECT seriesID, ? FROM (SELECT ID AS seriesID FROM series WHERE title = ?) subTable";
             PreparedStatement relationStmt = conn.prepareStatement(genreRelationSql);
             relationStmt.setInt(1, (genre.ordinal()+1));
             relationStmt.setString(2, title);

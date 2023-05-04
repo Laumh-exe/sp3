@@ -458,7 +458,9 @@ public class Service {
 
     private void onClose() {
         io.saveData("data/userdata.csv", users);
-        io.saveToDB(new ArrayList<ISavable>(media));
+        io.saveToDB(new ArrayList<ISavable>(media)); // |
+        io.saveToDB(new ArrayList<ISavable>(users)); // | Thies 2 culd be made into one saveToDB() call by first merging them into one ISavable list
+
         ui.displayMessage("Program is closing, goodbye");
     }
 
