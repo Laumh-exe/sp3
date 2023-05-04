@@ -27,6 +27,10 @@ public abstract class AMedia implements ISavable{
     public float getRating(){
         return rating;
     }
+    
+    public String getTypeOfMedia() {
+        return typeOfMedia;
+    }
 
     @Override
     public String toString(){
