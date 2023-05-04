@@ -462,16 +462,20 @@ public class IO {
 
 
     public void saveToDB(List<ISavable> savables) {
-        String DB_URL = "jdbc:mysql://localhost/sp3";
+
+        connectToDB();
+        /*String DB_URL = "jdbc:mysql://localhost/sp3";
         String USER = "root";
         String PASS = "Simon99";
 
         Connection conn = null;
         Statement stmt = null;
 
+         */
+
         try{
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            //Class.forName("com.mysql.jdbc.Driver");
+            //conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             for (ISavable toSave : savables) {
                 int linesEffected = toSave.update(conn);
