@@ -2,10 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -17,6 +14,15 @@ public class IO {
     File file;
 
     Scanner scan;
+
+    private final String DB_URL = "jdbc:mysql://localhost/sp3";
+
+    //  Database credentials
+    private final String USER = "root";
+    private final String PASS = "/TRosseneri1899";
+
+    private Connection conn = null;
+    private PreparedStatement stmt = null;
     public ArrayList<String> getData(String path) throws FileNotFoundException {
 
         ArrayList<String> data = new ArrayList<>();
