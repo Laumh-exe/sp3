@@ -105,6 +105,7 @@ public class Service {
         // ############ FILM OG SERIER DATA ############
 
         // Data fra IO (lister med String-elementer, der skal splittes)
+
         //List<String> dataFilm = io.getData("data/film.csv");
         List<String> dataFilm = io.readMovieDataFromDB("\n" +
                 "SELECT * FROM movies JOIN movie_genre ON movies.ID = movie_genre.movieid \n" +
@@ -113,7 +114,10 @@ public class Service {
 
         //List<String> dataSerier = io.getData("data/serier.csv");
         List<String> dataSerier = io.readSeriesDataFromDB("SELECT * FROM series JOIN series_genre ON series.ID = series_genre.seriesid JOIN genres ON series_genre.genreID = genres.id JOIN series_seasons ON series_seasons.seriesID = series.ID");
-        List<String> dataUser = io.getData("data/userdata.csv");
+        //List<String> dataUser = io.getData("data/userdata.csv");
+
+        List<String> dataUser = io.readUserDatafromDB();
+
         // FILM
         formatMoviesDataFromString(dataFilm);
         // SERIER
@@ -464,7 +468,9 @@ public class Service {
 
     private void onClose() {
         io.saveData("data/userdata.csv", users);
-        io.saveToDB(new ArrayList<ISavable>(media));
+        io.saveToDB(new ArrayList<ISavable>(media)); // |
+        io.saveToDB(new ArrayList<ISavable>(users)); // | Thies 2 culd be made into one saveToDB() call by first merging them into one ISavable list
+
         ui.displayMessage("Program is closing, goodbye");
     }
 

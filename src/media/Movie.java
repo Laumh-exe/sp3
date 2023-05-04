@@ -39,6 +39,7 @@ public class Movie extends AMedia {
             PreparedStatement relationStmt = conn.prepareStatement(genreRelationSql);
             relationStmt.setInt(1, (genre.ordinal()+1));
             relationStmt.setString(2, title);
+            relationStmt.executeUpdate();
             relationStmt.close();
         }
     }
