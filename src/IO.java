@@ -21,12 +21,6 @@ public class IO {
 
     Scanner scan;
 
-    private final String DB_URL = "jdbc:mysql://localhost/sp3";
-
-    //  Database credentials
-    private final String USER = "root";
-    private final String PASS = "/TRosseneri1899";
-
     private Connection conn = null;
     private PreparedStatement stmt = null;
 
@@ -39,7 +33,6 @@ public class IO {
 
 
             //STEP 2: Open a connection
-            System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
 
@@ -66,7 +59,6 @@ public class IO {
         List<String> list_of_Users_Passwords_and_To_Watch_List_from_Database = new ArrayList<>();
 
         try {
-            System.out.println("Creating statements...");
 
             //--------------------------------------------------------
             // Creating list with all users and their passwords
