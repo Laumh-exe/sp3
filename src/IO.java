@@ -4,13 +4,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import media.AMedia;
 import media.ISavable;
 
 public class IO {
+    // database URL
+    static final String DB_URL = "jdbc:mysql://localhost/sp3";
 
+    //  Database credentials
+    static final String USER = "root";
+    static final String PASS = "4&G3#n&7552b44";
     File file;
 
     Scanner scan;
@@ -265,6 +271,181 @@ public class IO {
         return data;
     }
 
+    public ArrayList<String> readMovieDataFromDB(String query) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ArrayList<String> dataList = new ArrayList<>();
+        try{
+            //STEP 1: Register JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+
+            //STEP 2: Open a connection
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            //STEP 3: Execute a query
+            String sql = query; //Here: whatever query the method is called with - How to use
+            stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+            String data = "";
+            String currentMovie = "";
+            float rating = 0;
+            String title = "";
+            int year = 0; // Release date +  end date( if there is one)
+            HashSet<String> genres = new HashSet<>();
+            HashSet<String> seasonsAndEpisodes =  new HashSet<>();
+
+            //STEP 4: Extract data from result set
+            while(rs.next()){
+                if(title.length() == 0) {
+                    title = rs.getString("title");
+                }
+                if(!title.equalsIgnoreCase(rs.getString("Title"))) {
+                    data += title + "; ";
+                    data += year + " ; ";
+                    for (String genre: genres) {
+                        data += genre + ", ";
+                    }
+                    String tmpData = data.substring(0, data.length()-2);
+                    data = tmpData;
+                    data += "; ";
+                    data += rating + "; ";
+                    dataList.add(data);
+                    data = "";
+                    genres.clear();
+                    title = rs.getString("title");
+                }
+
+                title = rs.getString("Title");
+                year = rs.getInt("year");
+                genres.add(rs.getString("genre"));
+                rating = rs.getFloat("rating");
+            }
+//STEP 5: Clean-up environment
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+            }catch(SQLException se2){
+            }// nothing we can do
+            try{
+                if(conn!=null)
+                    conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+        return dataList;
+    }
+
+     public ArrayList<String> readSeriesDataFromDB(String query) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ArrayList<String> dataList = new ArrayList<>();
+        try{
+            //STEP 1: Register JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+
+            //STEP 2: Open a connection
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            //STEP 3: Execute a query
+            String sql = query; //Here: whatever query the method is called with - How to use
+            stmt = conn.prepareStatement(sql);
+
+            ResultSet rs = stmt.executeQuery();
+
+
+            String data = "";
+            String currentMovie = "";
+            float rating = 0;
+            String title = "";
+            String run = ""; // Release date +  end date( if there is one)
+            HashSet<String> genres = new HashSet<>();
+            HashSet<String> seasonsAndEpisodes =  new HashSet<>();
+            String seasons = "";
+            //STEP 4: Extract data from result set
+            while(rs.next()){
+                if(title.length() == 0) {
+                    title = rs.getString("title");
+                }
+                if(!title.equalsIgnoreCase(rs.getString("Title"))) {
+                    data += title + "; ";
+                    data += run + " ; ";
+                    for (String genre: genres) {
+                        data += genre + ", ";
+                    }
+                    String tmpData = data.substring(0, data.length()-2);
+                    data = tmpData;
+                    data += "; ";
+                    data += rating + "; ";
+                    for (String s : seasonsAndEpisodes) {
+                        data += s + ", ";
+                    }
+                    tmpData = data.substring(0, data.length()-2);
+                    data = tmpData;
+                    data += ";";
+                    dataList.add(data);
+                    data = "";
+                    genres.clear();
+                    seasonsAndEpisodes.clear();
+                    title = rs.getString("title");
+                }
+
+                title = rs.getString("Title");
+                run = rs.getInt("startYear") + "-";
+                if (rs.getInt("endyear") != -1) {
+                    run += rs.getInt("endyear");
+                }
+                genres.add(rs.getString("genre"));
+                rating = rs.getFloat("rating");
+                seasonsAndEpisodes.add(rs.getInt("seasonNumber") + "-" + rs.getInt("seasonNumberOfEpisodes"));
+
+            }
+            /*
+            for(String s: dataList) {
+                System.out.println(s);
+            }
+
+             */
+            //STEP 5: Clean-up environment
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }finally{
+            //finally block used to close resources
+            try{
+                if(stmt!=null)
+                    stmt.close();
+            }catch(SQLException se2){
+            }// nothing we can do
+            try{
+                if(conn!=null)
+                    conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+        return dataList;
+    }
+
 
 
     public void saveData (String path, List <User> users){
@@ -317,7 +498,7 @@ public class IO {
         connectToDB();
         /*String DB_URL = "jdbc:mysql://localhost/sp3";
         String USER = "root";
-        String PASS = "Simon99";
+        String PASS = "4&G3#n&7552b44";
 
         Connection conn = null;
         Statement stmt = null;
