@@ -17,7 +17,7 @@ import media.ISavable;
 
 public class IO {
     // database URL
-    static final String DB_URL = "jdbc:mysql://localhost/world";
+    static final String DB_URL = "jdbc:mysql://localhost/sp3";
 
     //  Database credentials
     static final String USER = "root";
@@ -70,14 +70,19 @@ public class IO {
             String currentMovie = "";
             String data = "";
             float rating = 0;
-            int iDCounter = rs.getInt("ID");
+            int iDCounter = 1;
             //STEP 4: Extract data from result set
             while(rs.next()){
                 // Do last
                 // Add data
                 int iD = rs.getInt("ID");
                 if(iDCounter != iD) {
-                    data = data.substring(0,data.length()-1);
+                    try {
+                        data = data.substring(0,data.length()-1);
+                    }
+                    catch(StringIndexOutOfBoundsException e) {
+                       break;
+                    }
                     data += "; " + rating + ";";
                     dataList.add(data);
                     data = "";
@@ -87,7 +92,7 @@ public class IO {
                 // Do first
                 if (currentMovie != rs.getString("Title")) {
                     data += rs.getString("Title") + "; ";
-                    data += rs.getInt("Release Date") + "; ";
+                    data += rs.getInt("year") + "; ";
                     currentMovie = rs.getString("Title");
                 }
                 // Do for every row
@@ -95,6 +100,9 @@ public class IO {
                     data += rs.getString("Genre") + ", "; //TODO : Get genre list in correct string
                 }
                 rating = rs.getFloat("Rating");
+            }
+            for (String s:dataList) {
+                System.out.println(s);
             }
 //STEP 5: Clean-up environment
             rs.close();
@@ -123,7 +131,7 @@ public class IO {
         return dataList;
     }
 
-    /* public ArrayList<String> readSeriesDataFromDB(String query) {
+     public ArrayList<String> readSeriesDataFromDB(String query) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ArrayList<String> dataList = new ArrayList<>();
@@ -142,9 +150,10 @@ public class IO {
 
             ResultSet rs = stmt.executeQuery();
 
-            String currentMovie = rs.getString("title");
+
             String data = "";
-            float rating;
+            String currentMovie = "";
+            float rating = 0;
             String title = "";
             String run = ""; // Release date +  end date( if there is one)
             HashSet<String> genres = new HashSet<>();
@@ -152,26 +161,43 @@ public class IO {
 
             String seasons = "";
             //STEP 4: Extract data from result set
+            title = "Twin Peaks";
             while(rs.next()){
-                // IF CURRENTMOVIE IS NOT THE SAME
-                    // Save title, startdate, releaseDate, in data String
-                        // Check if endDate == -1 (if it is, then there is not end date set)
-                    // Then add genres from hashset to data String with a for-each loop
-                    // now add seasons/episodes to data String with a for-each loop
-                    // save the data in array list and save current movie as whatever the title is now - now we move on to next film:
-
-                // Check if currentmovie is the same as title if it is do the following:
-                // save title, startDate, releaseDate, rating in variables for use later
-                // save genres in hashset,
-                // save seasons with episode as string in hashset
-
-                if(!currentMovie.equalsIgnoreCase(rs.getString("title"))) {
-
+                if(!title.equalsIgnoreCase(rs.getString("Title"))) {
+                    data += title + "; ";
+                    data += run + " ; ";
+                    for (String genre: genres) {
+                        data += genre + ", ";
+                    }
+                    String tmpData = data.substring(0, data.length()-2);
+                    data = tmpData;
+                    data += "; ";
+                    data += rating + "; ";
+                    for (String s : seasonsAndEpisodes) {
+                        data += s + ", ";
+                    }
+                    tmpData = data.substring(0, data.length()-2);
+                    data = tmpData;
+                    data += ";";
+                    dataList.add(data);
+                    data = "";
+                    genres.clear();
+                    seasonsAndEpisodes.clear();
+                    title = rs.getString("title");
                 }
                 else {
                     title = rs.getString("Title");
-                    run += rs.getint("startYear"); // TODO :
+                    run = rs.getInt("startYear") + "-";
+                    if (rs.getInt("endyear") != -1) {
+                        run += rs.getInt("endyear");
+                    }
+                    genres.add(rs.getString("genre"));
+                    rating = rs.getFloat("rating");
+                    seasonsAndEpisodes.add(rs.getInt("seasonNumber") + "-" + rs.getInt("seasonNumberOfEpisodes"));
                 }
+            }
+            for(String s: dataList) {
+                System.out.println(s);
             }
             //STEP 5: Clean-up environment
             rs.close();
@@ -198,7 +224,7 @@ public class IO {
             }//end finally try
         }//end try
         return dataList;
-    } */
+    }
 
 
 
@@ -250,7 +276,7 @@ public class IO {
     public void saveToDB(List<ISavable> savables) {
         String DB_URL = "jdbc:mysql://localhost/sp3";
         String USER = "root";
-        String PASS = "Simon99";
+        String PASS = "4&G3#n&7552b44";
 
         Connection conn = null;
         Statement stmt = null;
