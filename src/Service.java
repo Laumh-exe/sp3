@@ -108,6 +108,11 @@ public class Service {
         List<String> dataFilm = io.getData("data/film.csv");
         List<String> dataSerier = io.getData("data/serier.csv");
         List<String> dataUser = io.getData("data/userdata.csv");
+
+
+
+
+
         // FILM
         formatMoviesDataFromString(dataFilm);
         // SERIER
