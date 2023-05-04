@@ -1,9 +1,14 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
 import media.AMedia;
+import media.ISavable;
 
-public class User {
+public class User implements ISavable {
 
     private String userName;
     private String password;
@@ -63,4 +68,99 @@ public class User {
         }
         return watchedListToString;
     }
+
+    @Override
+    public void create(Connection conn) throws SQLException {
+        String sql = "INSERT INTO users(username, password)\nVALUES(?,?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, userName);
+        stmt.setString(2, password);
+        stmt.executeUpdate();
+        update(conn);
+        stmt.close();
+    }
+
+    @Override
+    public int update(Connection conn) throws SQLException {
+        String userIDGetSQL = "SELECT ID FROM users WHERE username = ?"; 
+        PreparedStatement stmt = conn.prepareStatement(userIDGetSQL);
+        stmt.setString(1, userName);
+        ResultSet iDResultSet = stmt.executeQuery();
+        if(!iDResultSet.next()){
+            return 0;
+        }
+        int userID = iDResultSet.getInt(1);
+        
+        for (AMedia aMedia : watchList) {
+            if (aMedia.getTypeOfMedia().equalsIgnoreCase("film")) {
+
+                int mediaID = getMediaID("movies", stmt, conn, aMedia);
+
+                ResultSet pairRS = findPair("user_to_watch_movies", stmt, conn, userID, mediaID,"movieID");
+                
+                if(!pairRS.next()){
+                    insertInto("user_to_watch_movies", stmt, conn, userID, mediaID,"movieID");
+                }
+            } else {
+                int mediaID = getMediaID("series", stmt, conn, aMedia);
+                
+                ResultSet pairRS = findPair("user_to_watch_series", stmt, conn, userID, mediaID,"seriesID");
+                if(!pairRS.next()){
+                    insertInto("user_to_watch_series", stmt, conn, userID, mediaID, "seriesID");
+                }
+            }
+        }
+        for (AMedia aMedia : watchedMedia) {
+            if (aMedia.getTypeOfMedia().equalsIgnoreCase("film")) {
+                int mediaID = getMediaID("movies", stmt, conn, aMedia);
+                
+                ResultSet pairRS = findPair("user_watched_movies", stmt, conn, userID, mediaID,"movieID");
+                
+                if(!pairRS.next()){
+                    insertInto("user_watched_movies", stmt, conn, userID, mediaID, "movieID");
+                }
+            } else {
+                int mediaID = getMediaID("series", stmt, conn, aMedia);
+                
+                ResultSet pairRS = findPair("user_watched_series", stmt, conn, userID, mediaID,"seriesID");
+                
+                if(!pairRS.next()){
+                    insertInto("user_watched_series", stmt, conn, userID, mediaID,"seriesID");
+                }
+
+            }
+        }
+        stmt.close();
+        return 1;
+    }
+
+    private int getMediaID(String table, PreparedStatement stmt, Connection conn, AMedia aMedia) throws SQLException{
+        String mediaIDGetSQL = "SELECT ID FROM " + table + " WHERE title = ?"; 
+        stmt = conn.prepareStatement(mediaIDGetSQL);
+        stmt.setString(1, aMedia.getTitle());
+        ResultSet mediaIDRS = stmt.executeQuery();
+        mediaIDRS.next();
+        return mediaIDRS.getInt("ID");
+    }
+
+    private void insertInto(String table, PreparedStatement stmt, Connection conn, int userID, int mediaID, String mediaIDName) throws SQLException{
+        String insertSQL = "INSERT INTO " + table + "(userID,"+ mediaIDName +") VALUES(?,?)";
+        // String insertSQL = "INSERT INTO user_to_watch_series(userID, ?) VALUES(?,?)";
+        stmt = conn.prepareStatement(insertSQL);
+        stmt.setInt(1, userID);
+        stmt.setInt(2, mediaID);
+        stmt.executeUpdate();
+    }
+
+    private ResultSet findPair(String table, PreparedStatement stmt, Connection conn, int userID, int mediaID, String mediaIDName) throws SQLException{
+        String userMoviePair = "SELECT * FROM "+ table +" WHERE userID = ? AND " + mediaIDName + " = ?"; 
+        stmt = conn.prepareStatement(userMoviePair);
+        stmt.setInt(1, userID);
+        stmt.setInt(2, mediaID);
+        return stmt.executeQuery();
+    }
+
 }
+
+
+
