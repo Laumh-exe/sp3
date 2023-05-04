@@ -107,10 +107,17 @@ public class Service {
         // Data fra IO (lister med String-elementer, der skal splittes)
         List<String> dataFilm = io.getData("data/film.csv");
         List<String> dataSerier = io.getData("data/serier.csv");
-        List<String> dataUser = io.getData("data/userdata.csv");
+        //List<String> dataUser = io.getData("data/userdata.csv");
 
 
+        List<String> dataUser = io.readUserDatafromDB();
 
+        // SOUT TESTER --------------------------------------------
+        for (String userData : dataUser) {
+
+            System.out.println(userData);
+        }
+        // --------------------------------------------------------
 
 
         // FILM
