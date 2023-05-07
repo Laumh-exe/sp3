@@ -16,7 +16,7 @@ public class IO {
 
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "4&G3#n&7552b44";
+    static final String PASS = "/TRosseneri1899";
     File file;
 
     Scanner scan;
@@ -49,6 +49,125 @@ public class IO {
     }
 
 
+    public List<String> refactoringUserDatafromDB() {
+
+        connectToDB();
+
+        ArrayList<String> dataList = new ArrayList<>();
+
+        try {
+        String query =  "SELECT users.username, users.password, movies.title, series.title FROM users " +
+                "LEFT JOIN user_to_watch_movies ON user_to_watch_movies.userID = users.ID " +
+                "LEFT JOIN movies ON user_to_watch_movies.movieID = movies.ID " +
+                "LEFT JOIN user_to_watch_series ON user_to_watch_series.userID = users.ID " +
+                "LEFT JOIN series ON user_to_watch_series.seriesID = series.ID";
+
+        //STEP 3: Execute a query
+        String sql = query; //Here: whatever query the method is called with - How to use
+
+        stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+
+        String the_User_Data = "";
+
+        String user_Name = "";
+
+        String password = "";
+        HashSet<String> movie_Titles = new HashSet<>();
+        HashSet<String> series_Titles =  new HashSet<>();
+
+        //String seasons = "";
+
+
+        //STEP 4: Extract data from result set
+        while(rs.next()){
+
+            // Getting the first username of the SQL table
+            if(user_Name.length() == 0) {
+                user_Name = rs.getString("username");
+            }
+
+
+            if(!user_Name.equalsIgnoreCase(rs.getString("username"))) {
+
+                the_User_Data += user_Name + "; ";
+                the_User_Data += password + " ; ";
+
+                for (String movie: movie_Titles) {
+
+                    if (movie != null) {
+                        the_User_Data += movie + ", ";
+                    }
+                }
+                for (String s : series_Titles) {
+                    if (s != null) {
+                        the_User_Data += s + ", ";
+                    }
+
+                }
+                the_User_Data += ";";
+                dataList.add(the_User_Data);
+                the_User_Data = "";
+                movie_Titles.clear();
+                series_Titles.clear();
+                user_Name = rs.getString("username");
+            }
+
+            user_Name = rs.getString("username");
+            password = rs.getString("password");
+
+
+            movie_Titles.add(rs.getString("movies.title"));
+            series_Titles.add(rs.getString("series.title"));
+
+        }
+
+        // Adding the last user in the SQL table to the dataList to return
+        the_User_Data += user_Name + "; ";
+        the_User_Data += password + " ; ";
+        for (String movie: movie_Titles) {
+            if (movie != null) {
+                the_User_Data += movie + ", ";
+            }
+        }
+        for (String s : series_Titles) {
+            if (s != null) {
+                the_User_Data += s + ", ";
+            }
+        }
+        the_User_Data += ";";
+        dataList.add(the_User_Data);
+
+
+        //STEP 5: Clean-up environment
+        rs.close();
+        stmt.close();
+        conn.close();
+    }catch(SQLException se){
+        //Handle errors for JDBC
+        se.printStackTrace();
+    }catch(Exception e){
+        //Handle errors for Class.forName
+        e.printStackTrace();
+    }finally{
+        //finally block used to close resources
+        try{
+            if(stmt!=null)
+                stmt.close();
+        }catch(SQLException se2){
+        }// nothing we can do
+        try{
+            if(conn!=null)
+                conn.close();
+        }catch(SQLException se){
+            se.printStackTrace();
+        }//end finally try
+    }//end try
+        return dataList;
+}
+
+
+
 
     public List<String> readUserDatafromDB () {
 
@@ -60,19 +179,24 @@ public class IO {
 
         try {
 
+
+
+
+
+
+
             //--------------------------------------------------------
             // Creating list with all users and their passwords
             String sql_query_Username_Password = "SELECT username, password FROM users";
 
             stmt = conn.prepareStatement(sql_query_Username_Password);
-
-            ResultSet result_Set_Username_And_Password = stmt.executeQuery(sql_query_Username_Password);
+            ResultSet rs_Usernames_And_Passwords = stmt.executeQuery(sql_query_Username_Password);
 
             List<String> userNameS_and_passwordS = new ArrayList<>();
 
-            while (result_Set_Username_And_Password.next()) {
-                String userName = result_Set_Username_And_Password.getString("username");
-                String password = result_Set_Username_And_Password.getString("password");
+            while (rs_Usernames_And_Passwords.next()) {
+                String userName = rs_Usernames_And_Passwords.getString("username");
+                String password = rs_Usernames_And_Passwords.getString("password");
 
                 //String userName_and_password = userName + "; " + password + "; ";
 
@@ -81,20 +205,22 @@ public class IO {
             }
 
 
-            String sql_getting_ToWatchList_Movies = "SELECT username, movies.title FROM users";
-            sql_getting_ToWatchList_Movies += " LEFT JOIN user_to_watch_movies ON user_to_watch_movies.userID = users.ID";
-            sql_getting_ToWatchList_Movies +=" LEFT JOIN movies ON user_to_watch_movies.movieID = movies.ID";
 
+
+            // Creating list with all users and movies on their To Watch List
             List<String> userNameS_and_movieTitleS = new ArrayList<>();
+
+            String sql_getting_ToWatchList_Movies = "SELECT username, movies.title FROM users " +
+                    "LEFT JOIN user_to_watch_movies ON user_to_watch_movies.userID = users.ID " +
+                    "LEFT JOIN movies ON user_to_watch_movies.movieID = movies.ID";
 
 
             stmt = conn.prepareStatement(sql_getting_ToWatchList_Movies);
+            ResultSet rs_ToWatchList_Movies = stmt.executeQuery(sql_getting_ToWatchList_Movies);
 
-            ResultSet result_Set_ToWatchList_Movies = stmt.executeQuery(sql_getting_ToWatchList_Movies);
-
-            while (result_Set_ToWatchList_Movies.next()) {
-                String userName = result_Set_ToWatchList_Movies.getString("username");
-                String movieTitle_for_ToWatchList = result_Set_ToWatchList_Movies.getString("movies.title");
+            while (rs_ToWatchList_Movies.next()) {
+                String userName = rs_ToWatchList_Movies.getString("username");
+                String movieTitle_for_ToWatchList = rs_ToWatchList_Movies.getString("movies.title");
 
                 if (movieTitle_for_ToWatchList != null) {
                     userNameS_and_movieTitleS.add(userName);
@@ -104,9 +230,11 @@ public class IO {
 
             // Creating list with all users and series on their To Watch List
             List<String> userNameS_and_seriesTitleS = new ArrayList<>();
-            String sql_getting_ToWatchList_Series = "SELECT username, series.title FROM users";
-            sql_getting_ToWatchList_Series += " LEFT JOIN user_to_watch_series ON user_to_watch_series.userID = users.ID";
-            sql_getting_ToWatchList_Series += " LEFT JOIN series ON user_to_watch_series.seriesID = series.ID";
+
+
+            String sql_getting_ToWatchList_Series = "SELECT username, series.title FROM users " +
+                    "LEFT JOIN user_to_watch_series ON user_to_watch_series.userID = users.ID" +
+                    " LEFT JOIN series ON user_to_watch_series.seriesID = series.ID";
 
             stmt = conn.prepareStatement(sql_getting_ToWatchList_Series);
 
@@ -143,9 +271,10 @@ public class IO {
 
             // Creating list with all users and series on their To Watch List
             List<String> userNameS_and_seriesTitleS_Watched = new ArrayList<>();
-            String sql_getting_Watched_Series = "SELECT username, series.title FROM users";
-            sql_getting_Watched_Series += " LEFT JOIN user_watched_series ON user_watched_series.userID = users.ID";
-            sql_getting_Watched_Series += " LEFT JOIN series ON user_watched_series.seriesID = series.ID";
+
+            String sql_getting_Watched_Series = "SELECT username, series.title FROM users" +
+                    " LEFT JOIN user_watched_series ON user_watched_series.userID = users.ID" +
+                    " LEFT JOIN series ON user_watched_series.seriesID = series.ID";
 
             stmt = conn.prepareStatement(sql_getting_Watched_Series);
             ResultSet result_Set_Watched_Series = stmt.executeQuery(sql_getting_Watched_Series);
@@ -269,10 +398,11 @@ public class IO {
         ArrayList<String> dataList = new ArrayList<>();
         try{
             //STEP 1: Register JDBC driver
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             //STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
 
             //STEP 3: Execute a query
             String sql = query; //Here: whatever query the method is called with - How to use
@@ -344,10 +474,12 @@ public class IO {
      public ArrayList<String> readSeriesDataFromDB(String query) {
         Connection conn = null;
         PreparedStatement stmt = null;
+
         ArrayList<String> dataList = new ArrayList<>();
+
         try{
             //STEP 1: Register JDBC driver
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             //STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
@@ -357,7 +489,6 @@ public class IO {
             stmt = conn.prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
-
 
             String data = "";
             String currentMovie = "";
@@ -405,6 +536,23 @@ public class IO {
                 seasonsAndEpisodes.add(rs.getInt("seasonNumber") + "-" + rs.getInt("seasonNumberOfEpisodes"));
 
             }
+
+            data += title + "; ";
+            data += run + " ; ";
+            for (String genre: genres) {
+                data += genre + ", ";
+            }
+            String tmpData = data.substring(0, data.length()-2);
+            data = tmpData;
+            data += "; ";
+            data += rating + "; ";
+            for (String s : seasonsAndEpisodes) {
+                data += s + ", ";
+            }
+            tmpData = data.substring(0, data.length()-2);
+            data = tmpData;
+            data += ";";
+            dataList.add(data);
             /*
             for(String s: dataList) {
                 System.out.println(s);
