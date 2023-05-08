@@ -105,6 +105,7 @@ public class IO {
                     }
 
                 }
+
                 the_User_Data += ";";
                 dataList.add(the_User_Data);
                 the_User_Data = "";
